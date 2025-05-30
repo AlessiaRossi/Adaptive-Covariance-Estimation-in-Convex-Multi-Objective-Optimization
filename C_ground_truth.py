@@ -32,7 +32,7 @@ def optimize_for_lambda(lambdas, x_range=(-2, 2)):
 def generate_lambdas(n_samples, n_objectives=3):
     return np.random.dirichlet(np.ones(n_objectives), size=n_samples)
 
-def compute_and_save_separate_csv(N_ref=100,
+def compute_and_save_separate_csv(N_ref=10000,
                                   data_filename='C:\\Users\\aless\\Desktop\\Tesi\\Articolo\\Articolo\\results_data.csv',
                                   covariance_filename='C:\\Users\\aless\\Desktop\\Tesi\\Articolo\\Articolo\\results_covariance.csv'):
     lambdas_samples = generate_lambdas(N_ref)
@@ -72,6 +72,6 @@ def compute_and_save_separate_csv(N_ref=100,
     return df, C_ref, x_mean
 
 # Esempio di esecuzione
-df_sol, cov_mat, media = compute_and_save_separate_csv(N_ref=1000)
+df_sol, cov_mat, media = compute_and_save_separate_csv(N_ref=10000)
 print("Media x̄:", media)
 print("Matrice di covarianza C_ref:\n", cov_mat)
