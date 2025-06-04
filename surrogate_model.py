@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing    import StandardScaler
-from sklearn.model_selection  import train_test_split
-from sklearn.metrics          import mean_squared_error, r2_score, mean_absolute_error
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from sklearn.gaussian_process import GaussianProcessRegressor
 import matplotlib.pyplot as plt
 from matplotlib import cm
@@ -12,23 +12,29 @@ from scipy.optimize import minimize
 from scipy.optimize import differential_evolution
 from pymoo.problems.many import DTLZ2
 from scipy.stats import norm
+
 # --- Covariance computation parameters ---
-NUM_PERTURBATIONS = 20 # Number of perturbations for covariance estimation
-PERTURBATION_STRENGTH = 0.025 # Strength of lambda perturbations
-GLOBAL_SEED = 42 # Define a global seed for reproducibility
+NUM_PERTURBATIONS = 20  # Number of perturbations for covariance estimation
+PERTURBATION_STRENGTH = 0.025  # Strength of lambda perturbations
+GLOBAL_SEED = 42  # Define a global seed for reproducibility
 np.random.seed(GLOBAL_SEED)
 # --- Data generation parameters ---
-NUM_LAMBDA_SAMPLES = 1000 # Number of base lambda vectors for dataset
+NUM_LAMBDA_SAMPLES = 5000  # Number of base lambda vectors for dataset
+
+
 # Problem Definition
 def loss_1(x):
     # x vettore 3D, applichiamo la formula elemento per elemento e sommiamo
     return np.sum(x * np.cos(x) - x ** 3 + np.sin(x))
 
+
 def loss_2(x):
     return np.sum(5 * np.sin(x) + 5 * x ** 3 - np.cos(x) * np.exp(x))
 
+
 def loss_3(x):
     return np.sum(-4 * x ** 4 * np.cos(x) + np.sin(x) * np.exp(-x))
+
 
 def combined_loss(x, lambdas):
     lambdas = np.array(lambdas)
@@ -36,7 +42,6 @@ def combined_loss(x, lambdas):
         raise ValueError("lambdas must be non-negative and sum to 1")
 
     return lambdas[0] * loss_1(x) + lambdas[1] * loss_2(x) + lambdas[2] * loss_3(x)
-
 
 
 def optimize_for_lambda(lambdas, x_range=(-2, 2)):
@@ -58,6 +63,8 @@ def optimize_for_lambda(lambdas, x_range=(-2, 2)):
         raise RuntimeError("Ottimizzazione fallita")
 
     return best_result.x, best_result.fun
+
+
 '''   
 # Problem Definition
 n_obj = 3
@@ -66,26 +73,26 @@ n_vars = n_obj + k - 1
 problem = DTLZ2(n_var=n_vars, n_obj=n_obj)
 
 def scalarized_objective(x, lambdas):
-    
+
     f = problem.evaluate(np.array([x]))[0]  
-    
+
     return np.dot(lambdas, f)  
 
 
 def optimize_for_lambda(lambdas, x_range=(0.0, 1.0)):
-    
+
     lambdas = np.array(lambdas)
-    
+
     if not np.isclose(np.sum(lambdas), 1.0) or np.any(lambdas < 0):
         raise ValueError("lambdas must be non-negative and sum to 1")
-    
+
     objective = lambda x: scalarized_objective(x, lambdas)
-    
+
     # Use multiple starting points to avoid local minima
     starting_points = np.linspace(x_range[0], x_range[1], 10)
     best_result = None
     lowest_loss = float('inf')
-    
+
     for start in starting_points:
         result = minimize(objective, 
                           x0=np.full(n_vars, start), 
@@ -94,10 +101,11 @@ def optimize_for_lambda(lambdas, x_range=(0.0, 1.0)):
         if result.fun < lowest_loss:
             lowest_loss = result.fun
             best_result = result
-    
+
     return best_result.x, best_result.fun
 
 '''
+
 
 def generate_perturbed_lambdas(lambda_vec, num_perturbations, strength, rng):
     """
@@ -115,7 +123,7 @@ def generate_perturbed_lambdas(lambda_vec, num_perturbations, strength, rng):
 
     generated_count = 0
     attempts = 0
-    max_attempts = num_perturbations * 5 # Try more times to get unique perturbations
+    max_attempts = num_perturbations * 5  # Try more times to get unique perturbations
 
     temp_perturbed_lambdas = []
 
@@ -137,8 +145,8 @@ def generate_perturbed_lambdas(lambda_vec, num_perturbations, strength, rng):
             perturbed /= sum_perturbed
 
         temp_perturbed_lambdas.append(tuple(perturbed))
-        generated_count +=1
-        attempts +=1
+        generated_count += 1
+        attempts += 1
 
     # Use set to remove duplicates, then convert back to list
     # Sort to ensure order is deterministic if content is the same across runs
@@ -146,10 +154,10 @@ def generate_perturbed_lambdas(lambda_vec, num_perturbations, strength, rng):
 
     # If we still don't have enough unique perturbations, we might return fewer.
     # Or, one could add the base_lambda itself if not present.
-    if not perturbed_lambdas_list and num_perturbations > 0: # If list is empty but we wanted some
-        perturbed_lambdas_list.append(tuple(base_lambda / np.sum(base_lambda))) # Add normalized base as a fallback
+    if not perturbed_lambdas_list and num_perturbations > 0:  # If list is empty but we wanted some
+        perturbed_lambdas_list.append(tuple(base_lambda / np.sum(base_lambda)))  # Add normalized base as a fallback
 
-    return perturbed_lambdas_list[:num_perturbations] # Return up to num_perturbations
+    return perturbed_lambdas_list[:num_perturbations]  # Return up to num_perturbations
 
 
 # Wrapper for find_optimal_x to control its 'workers' and 'seed' parameter
@@ -170,13 +178,14 @@ def find_optimal_x_for_cov_wrapper(lambda_coeffs_tuple, workers_for_de, seed_for
     result = differential_evolution(
         objective_func,
         bounds=[(-2, 2)],  # Bounds for x
-        maxiter=1000,      # Maximum number of iterations
-        tol=1e-6,          # Tolerance for convergence
+        maxiter=1000,  # Maximum number of iterations
+        tol=1e-6,  # Tolerance for convergence
         workers=workers_for_de,
         seed=seed_for_optimizer  # Seed for reproducibility
     )
 
     return result.x[0], result.fun
+
 
 def hessian_estimation_for_lambda(lambdas, delta=0.01, base_seed=None):
     """
@@ -273,6 +282,7 @@ def hessian_estimation_for_lambda(lambdas, delta=0.01, base_seed=None):
     # perturbed_losses : how changes the optimal loss (F) with respect to the perturbations of the lambdas
     return perturbed_losses, x_opt
 
+
 def estimate_local_covariances_from_lambdas(lambda_vec, num_perturbations=10, delta=0.01):
     """
     Estimate the covariance of the optimal solution and objective function
@@ -323,9 +333,10 @@ def generate_lambda_samples(num_samples):
     samples.append((0.5, 0.5, 0.0))
     samples.append((0.5, 0.0, 0.5))
     samples.append((0.0, 0.5, 0.5))
-    samples.append((1/3, 1/3, 1/3))
+    samples.append((1 / 3, 1 / 3, 1 / 3))
 
-    return list(set(samples)) # Remove duplicates
+    return list(set(samples))  # Remove duplicates
+
 
 def compute_and_save_covariance_samples(n_samples, output_file):
     """
@@ -375,9 +386,11 @@ def compute_and_save_covariance_samples(n_samples, output_file):
     df.to_csv(output_file, index=False)
     return df
 
+
 def load_lambda_covariance_data(file_path='losses_cov.csv'):
     """Load the lambda-covariance data from CSV file"""
     return pd.read_csv(file_path)
+
 
 def fit_gp_model(data, n_training=100, random_state=42):
     """
@@ -423,13 +436,13 @@ def fit_gp_model(data, n_training=100, random_state=42):
     # 3. Rational Quadratic kernel - handles multiple length scales
     # Better than RBF for modeling functions with varying smoothness
     rational_quad = RationalQuadratic(length_scale=1.0, alpha=0.5,
-                                     length_scale_bounds=(0.01, 10.0),
-                                     alpha_bounds=(0.1, 10.0))
+                                      length_scale_bounds=(0.01, 10.0),
+                                      alpha_bounds=(0.1, 10.0))
 
     # 4. Matérn kernel - can model less smooth functions than RBF
     # nu=1.5 is less smooth than the standard nu=2.5
     matern = Matern(length_scale=[1.0, 1.0], nu=1.5,
-                  length_scale_bounds=(0.01, 10.0))
+                    length_scale_bounds=(0.01, 10.0))
 
     # 5. WhiteKernel - represents the noise in the data (fully learnable)
     noise = WhiteKernel(noise_level=0.1, noise_level_bounds=(1e-10, 1.0))
@@ -438,8 +451,8 @@ def fit_gp_model(data, n_training=100, random_state=42):
     # The sum of kernels allows for modeling different aspects of the data
     # The product with amplitude scales everything appropriately
     kernel = amplitude * (0.5 * rbf + 0.3 * rational_quad + 0.2 * matern) + noise
-    #kernel = amplitude * (0.5 * rbf + 0.2 * matern) + noise
-    #kernel = amplitude * (0.5 * rbf) + noise
+    # kernel = amplitude * (0.5 * rbf + 0.2 * matern) + noise
+    # kernel = amplitude * (0.5 * rbf) + noise
 
     print("Initial kernel configuration:")
     print(kernel)
@@ -508,6 +521,7 @@ def evaluate_model(model, X_test, y_test, scaler_X, scaler_y):
 
     return y_pred, y_std, metrics
 
+
 # Plot for problem visualization
 
 def plot_optimal_values_surface():
@@ -524,11 +538,9 @@ def plot_optimal_values_surface():
     optimal_losses = []
     optimal_x_values = []
 
-
     for l1 in lambda1_vals:
         for l2 in lambda2_vals:
             l3 = 1 - l1 - l2
-
 
             if l3 >= 0:
                 lambdas = np.array([l1, l2, l3])
@@ -540,13 +552,11 @@ def plot_optimal_values_surface():
                 optimal_losses.append(loss_min)
                 optimal_x_values.append(x_min)
 
-
     valid_lambda1 = np.array(valid_lambda1)
     valid_lambda2 = np.array(valid_lambda2)
     valid_lambda3 = np.array(valid_lambda3)
     optimal_losses = np.array(optimal_losses)
     optimal_x_values = np.array(optimal_x_values)
-
 
     fig = plt.figure(figsize=(12, 10))
     ax = fig.add_subplot(111, projection='3d')
@@ -555,10 +565,8 @@ def plot_optimal_values_surface():
                          c=optimal_losses, cmap=cm.viridis,
                          s=50, alpha=0.8)
 
-
     colorbar = fig.colorbar(scatter, ax=ax, shrink=0.5, aspect=5)
     colorbar.set_label('Optimal Loss Value', fontsize=12)
-
 
     ax.set_xlabel('Lambda 1')
     ax.set_ylabel('Lambda 2')
@@ -567,6 +575,7 @@ def plot_optimal_values_surface():
 
     plt.savefig('optimal_loss_surface_3d.png', dpi=300)
     return fig
+
 
 def visualize_covariance_results(df):
     """ Create visualizations for the lambda-covariance samples """
@@ -619,8 +628,9 @@ def visualize_covariance_results(df):
 
     return fig1, fig2, fig3
 
+
 def plot_gp_surface_with_test_points(model, X_train, X_test, y_train, y_test, y_pred,
-                                    y_std, scaler_X, scaler_y):
+                                     y_std, scaler_X, scaler_y):
     """
     Plot the GP model surface and the test points
     """
@@ -657,15 +667,15 @@ def plot_gp_surface_with_test_points(model, X_train, X_test, y_train, y_test, y_
 
     # Plot the GP surface using triangulation
     ax.plot_trisurf(L1_valid, L2_valid, y_mesh,
-                   cmap=cm.viridis, alpha=0.7, linewidth=0.2, edgecolor='gray')
+                    cmap=cm.viridis, alpha=0.7, linewidth=0.2, edgecolor='gray')
 
     # Plot training points in red
     ax.scatter(X_train[:, 0], X_train[:, 1], y_train,
-              color='red', s=5, label='Training points')
+               color='red', s=5, label='Training points')
 
     # Plot test points in blue
     ax.scatter(X_test[:, 0], X_test[:, 1], y_test,
-              color='blue', s=8, label='Test points')
+               color='blue', s=8, label='Test points')
 
     # Set labels and title
     ax.set_xlabel('Lambda 1')
@@ -708,6 +718,7 @@ def plot_gp_surface_with_test_points(model, X_train, X_test, y_train, y_test, y_
 
     return fig, fig2
 
+
 def plot_predicted_vs_true(y_test, y_pred, y_std):
     """
     Create a scatter plot of predicted vs true sensitivity norms
@@ -720,7 +731,7 @@ def plot_predicted_vs_true(y_test, y_pred, y_std):
     ax.plot([min_val, max_val], [min_val, max_val], 'k--', label='Perfect prediction')
 
     # Plot the predictions with error bars (95% confidence intervals)
-    ax.errorbar(y_test.ravel(), y_pred.ravel(), yerr=1.96*y_std,
+    ax.errorbar(y_test.ravel(), y_pred.ravel(), yerr=1.96 * y_std,
                 fmt='o', markersize=8, alpha=0.6,
                 ecolor='lightgray', capsize=5)
 
@@ -745,6 +756,7 @@ def plot_predicted_vs_true(y_test, y_pred, y_std):
 
     return fig
 
+
 def plot_gp_surface_with_test_points_enhanced(model, X_train_orig, y_train_orig, X_test_orig, y_test_orig,
                                               y_pred_test, test_point_errors, scaler_X_fitted, scaler_y_fitted,
                                               title_suffix="Covariance Norm"):
@@ -765,7 +777,7 @@ def plot_gp_surface_with_test_points_enhanced(model, X_train_orig, y_train_orig,
     L1_mesh, L2_mesh = np.meshgrid(l1_lin, l2_lin)
 
     # Valid points in the simplex (l1 + l2 <= 1)
-    valid_simplex_indices = (L1_mesh + L2_mesh <= 1.001) # Add small tolerance
+    valid_simplex_indices = (L1_mesh + L2_mesh <= 1.001)  # Add small tolerance
 
     grid_l1 = L1_mesh[valid_simplex_indices]
     grid_l2 = L2_mesh[valid_simplex_indices]
@@ -774,8 +786,8 @@ def plot_gp_surface_with_test_points_enhanced(model, X_train_orig, y_train_orig,
 
     # Scale grid points and predict
     X_grid_scaled = scaler_X_fitted.transform(X_grid)
-    y_grid_scaled, _ = model.predict(X_grid_scaled, return_std=True) # std not used for surface here
-    y_grid_pred = scaler_y_fitted.inverse_transform(y_grid_scaled.reshape(-1,1)).ravel()
+    y_grid_scaled, _ = model.predict(X_grid_scaled, return_std=True)  # std not used for surface here
+    y_grid_pred = scaler_y_fitted.inverse_transform(y_grid_scaled.reshape(-1, 1)).ravel()
 
     # Plot the GP surface using triangulation
     # The surface is for the mean prediction
@@ -785,12 +797,13 @@ def plot_gp_surface_with_test_points_enhanced(model, X_train_orig, y_train_orig,
 
     # Plot training points (unscaled)
     ax.scatter(X_train_orig[:, 0], X_train_orig[:, 1], y_train_orig.ravel(),
-               c='blue', marker='o', s=30, label='Training Points', alpha=0.7, depthshade=False, edgecolors='w', linewidth=0.5)
+               c='blue', marker='o', s=30, label='Training Points', alpha=0.7, depthshade=False, edgecolors='w',
+               linewidth=0.5)
 
     # Plot test points (unscaled), colored by their absolute error
     # Ensure test_point_errors has a suitable range for colormap
     min_err, max_err = np.min(test_point_errors), np.max(test_point_errors)
-    if min_err == max_err: # Handle case with uniform error (e.g., single test point)
+    if min_err == max_err:  # Handle case with uniform error (e.g., single test point)
         normalized_errors = np.ones_like(test_point_errors) * 0.5
     else:
         normalized_errors = (test_point_errors - min_err) / (max_err - min_err)
@@ -806,9 +819,9 @@ def plot_gp_surface_with_test_points_enhanced(model, X_train_orig, y_train_orig,
     # This requires a bit of manual setup for a scatter plot with colors mapped to values
     # One way is to use a ScalarMappable
     sm = plt.cm.ScalarMappable(cmap=error_cmap, norm=plt.Normalize(vmin=min_err, vmax=max_err))
-    sm.set_array([]) # You need to set an array for the ScalarMappable, even an empty one
-    cbar_errors = fig.colorbar(sm, ax=ax, shrink=0.5, aspect=10, pad=0.02, label='Absolute Prediction Error on Test Points')
-
+    sm.set_array([])  # You need to set an array for the ScalarMappable, even an empty one
+    cbar_errors = fig.colorbar(sm, ax=ax, shrink=0.5, aspect=10, pad=0.02,
+                               label='Absolute Prediction Error on Test Points')
 
     # Aesthetics and Labels
     ax.set_xlabel('$\lambda_1$', fontsize=14)
@@ -817,15 +830,16 @@ def plot_gp_surface_with_test_points_enhanced(model, X_train_orig, y_train_orig,
     ax.set_title(f'GP Model of {title_suffix} with Test Points', fontsize=16, pad=20)
 
     # Simplex boundary lines for clarity
-    ax.plot([0, 1], [0, 0], [ax.get_zlim()[0], ax.get_zlim()[0]], 'k-', alpha=0.5, linewidth=1.5) # l1 axis
-    ax.plot([0, 0], [0, 1], [ax.get_zlim()[0], ax.get_zlim()[0]], 'k-', alpha=0.5, linewidth=1.5) # l2 axis
-    ax.plot([1, 0], [0, 1], [ax.get_zlim()[0], ax.get_zlim()[0]], 'k-', alpha=0.5, linewidth=1.5) # l1+l2=1 line
+    ax.plot([0, 1], [0, 0], [ax.get_zlim()[0], ax.get_zlim()[0]], 'k-', alpha=0.5, linewidth=1.5)  # l1 axis
+    ax.plot([0, 0], [0, 1], [ax.get_zlim()[0], ax.get_zlim()[0]], 'k-', alpha=0.5, linewidth=1.5)  # l2 axis
+    ax.plot([1, 0], [0, 1], [ax.get_zlim()[0], ax.get_zlim()[0]], 'k-', alpha=0.5, linewidth=1.5)  # l1+l2=1 line
 
     ax.legend(loc='upper left', bbox_to_anchor=(0.02, 0.98))
-    ax.view_init(elev=25, azim=-40) # Adjust view angle for better visualization
+    ax.view_init(elev=25, azim=-40)  # Adjust view angle for better visualization
     plt.tight_layout()
     plt.show()
     return fig
+
 
 def train_and_prepare_surrogate(data, n_training=100, random_state=42):
     """

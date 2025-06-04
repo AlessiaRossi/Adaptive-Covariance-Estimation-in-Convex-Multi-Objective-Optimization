@@ -1,17 +1,25 @@
 #!/bin/bash
+
+#SBATCH -A NAISS2025-5-98 -p alvis
 #SBATCH --job-name=aco_active_learning
-#SBATCH --output=aco_active_learning_%j.out
-#SBATCH --error=aco_active_learning_%j.err
+#SBATCH --output=output_%j.txt
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=16G
-#SBATCH --time=24:00:00
+#SBATCH -t 0-75:00:0
+#SBATCH --gpus-per-node=A40:1
 
-# Load necessary modules (uncomment and modify as needed)
-# module load python/3.10
+# Carica moduli se necessario (decommenta se serve)
+module load Python/3.11.3-GCCcore-12.3.0
 
-# Activate virtual environment if needed
-source .venv/bin/activate
+# Attiva l'ambiente virtuale
+source ~/venvs/alessia-ml-env/bin/activate
 
-# Run the Python script
-python aco_active_learning.py
+# Esegui lo script Python desiderato
+#python C_r.py
+python alt3.py
+#python toy.py
+#python main.py
+#python surr_model_toy.py
+
+
+
+

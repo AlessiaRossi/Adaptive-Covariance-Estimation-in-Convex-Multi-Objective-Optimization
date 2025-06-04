@@ -1,0 +1,1010 @@
+This job can be monitored from: https://job.c3se.chalmers.se/alvis/4585512
+Synergy iterativa ACO ↔ Active Learning
+Loaded archive data with shape: (5007, 10)
+Loading surrogate model from surrogate_model1.pkl...
+ C_ref shape: (3, 3)
+Parameters: {'n_ants': 550, 'top_k': 50, 'alpha': 1.0, 'beta': 1.0, 'omega': 1.0, 'epsilon': 0.001, 'budget': 15, 'retrain_every': 5, 'n_init_diverse': 40}
+Colony 0: starting
+Colony 0: calculating heuristic eta
+Calculating heuristic eta...
+Colony 0: selecting initial diverse lambdas with criterion: heuristic
+Selecting diverse lambdas with min_dist=0.05...
+Colony 0: selected 40 initial diverse lambdas
+Nummber of selected lambdas: 40
+
+--- Iteration 1/15 | Colony: 0 ---
+Surrogate model reloaded.
+
+--- Iteration 1/15 ---
+ Selected lambdas: 40
+Current error: N/A
+Colony 2: starting
+Colony 2: calculating heuristic eta
+Calculating heuristic eta...
+Colony 2: selecting initial diverse lambdas with criterion: uniform
+Colony 2: selected 40 initial diverse lambdas
+Nummber of selected lambdas: 40
+
+--- Iteration 1/15 | Colony: 2 ---
+Surrogate model reloaded.
+
+--- Iteration 1/15 ---
+ Selected lambdas: 40
+Current error: N/A
+Colony 3: starting
+Colony 3: calculating heuristic eta
+Calculating heuristic eta...
+Colony 3: selecting initial diverse lambdas with criterion: random
+Colony 3: selected 40 initial diverse lambdas
+Nummber of selected lambdas: 40
+
+--- Iteration 1/15 | Colony: 3 ---
+Surrogate model reloaded.
+
+--- Iteration 1/15 ---
+ Selected lambdas: 40
+Current error: N/A
+Colony 1: starting
+Colony 1: calculating heuristic eta
+Calculating heuristic eta...
+Colony 1: selecting initial diverse lambdas with criterion: uncertainty
+Selecting diverse lambdas with min_dist=0.05...
+Colony 1: selected 40 initial diverse lambdas
+Nummber of selected lambdas: 40
+
+--- Iteration 1/15 | Colony: 1 ---
+Surrogate model reloaded.
+
+--- Iteration 1/15 ---
+ Selected lambdas: 40
+Current error: N/A
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 50
+Selected samples for update: 25
+New candidates added to selected set: 25
+Total selected lambdas after addition: 65
+No pruning needed
+[Iteration 1] Improvement: error 0.44494750 < best error 0.44494750
+Actual error: 0.44494750
+
+--- Iteration 2/15 | Colony: 2 ---
+
+--- Iteration 2/15 ---
+ Selected lambdas: 65
+ Current error: 0.44494750
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 25
+Selected samples for update: 12
+New candidates added to selected set: 12
+Total selected lambdas after addition: 77
+No pruning needed
+[Iteration 2] Improvement: error 0.39015287 < best error 0.39015287
+Actual error: 0.39015287
+
+--- Iteration 3/15 | Colony: 2 ---
+
+--- Iteration 3/15 ---
+ Selected lambdas: 77
+ Current error: 0.39015287
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 13
+Selected samples for update: 6
+New candidates added to selected set: 6
+Total selected lambdas after addition: 83
+No pruning needed
+[Iteration 3] No improvement: error 0.45371484 >= best error 0.39015287
+Actual error: 0.45371484
+
+--- Iteration 4/15 | Colony: 2 ---
+
+--- Iteration 4/15 ---
+ Selected lambdas: 83
+ Current error: 0.45371484
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 7
+Selected samples for update: 3
+New candidates added to selected set: 3
+Total selected lambdas after addition: 86
+No pruning needed
+[Iteration 4] No improvement: error 0.41947289 >= best error 0.39015287
+Actual error: 0.41947289
+
+--- Iteration 5/15 | Colony: 2 ---
+
+--- Iteration 5/15 ---
+ Selected lambdas: 86
+ Current error: 0.41947289
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 4
+Selected samples for update: 2
+New candidates added to selected set: 2
+Total selected lambdas after addition: 88
+No pruning needed
+[Iteration 5] No improvement: error 0.39736821 >= best error 0.39015287
+Actual error: 0.39736821
+
+--- Iteration 6/15 | Colony: 2 ---
+
+--- Iteration 6/15 ---
+ Selected lambdas: 88
+ Current error: 0.39736821
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 2
+Selected samples for update: 1
+New candidates added to selected set: 1
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 6] Improvement: error 0.38710108 < best error 0.38710108
+Actual error: 0.38710108
+
+--- Iteration 7/15 | Colony: 2 ---
+
+--- Iteration 7/15 ---
+ Selected lambdas: 89
+ Current error: 0.38710108
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 1
+Selected samples for update: 1
+New candidates added to selected set: 1
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 7] Improvement: error 0.37739826 < best error 0.37739826
+Actual error: 0.37739826
+
+--- Iteration 8/15 | Colony: 2 ---
+
+--- Iteration 8/15 ---
+ Selected lambdas: 90
+ Current error: 0.37739826
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 8] No improvement: error 0.37739826 >= best error 0.37739826
+Actual error: 0.37739826
+
+--- Iteration 9/15 | Colony: 2 ---
+
+--- Iteration 9/15 ---
+ Selected lambdas: 90
+ Current error: 0.37739826
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 9] No improvement: error 0.37739826 >= best error 0.37739826
+Actual error: 0.37739826
+
+--- Iteration 10/15 | Colony: 2 ---
+
+--- Iteration 10/15 ---
+ Selected lambdas: 90
+ Current error: 0.37739826
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 10] No improvement: error 0.37739826 >= best error 0.37739826
+Actual error: 0.37739826
+
+--- Iteration 11/15 | Colony: 2 ---
+
+--- Iteration 11/15 ---
+ Selected lambdas: 90
+ Current error: 0.37739826
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 11] No improvement: error 0.37739826 >= best error 0.37739826
+Actual error: 0.37739826
+
+--- Iteration 12/15 | Colony: 2 ---
+
+--- Iteration 12/15 ---
+ Selected lambdas: 90
+ Current error: 0.37739826
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 12] No improvement: error 0.37739826 >= best error 0.37739826
+Actual error: 0.37739826
+
+--- Iteration 13/15 | Colony: 2 ---
+
+--- Iteration 13/15 ---
+ Selected lambdas: 90
+ Current error: 0.37739826
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 13] No improvement: error 0.37739826 >= best error 0.37739826
+Actual error: 0.37739826
+
+--- Iteration 14/15 | Colony: 2 ---
+
+--- Iteration 14/15 ---
+ Selected lambdas: 90
+ Current error: 0.37739826
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 14] No improvement: error 0.37739826 >= best error 0.37739826
+Actual error: 0.37739826
+
+--- Iteration 15/15 | Colony: 2 ---
+
+--- Iteration 15/15 ---
+ Selected lambdas: 90
+ Current error: 0.37739826
+Sampling candidates
+Sampling candidates with scores: [1.10450352e-04 3.99324675e-04 7.67619865e-05 ... 9.23951221e-05
+ 3.98978283e-04 3.99312666e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 49
+Selected samples for update: 24
+New candidates added to selected set: 24
+Total selected lambdas after addition: 64
+No pruning needed
+[Iteration 1] Improvement: error 0.47955288 < best error 0.47955288
+Actual error: 0.47955288
+
+--- Iteration 2/15 | Colony: 0 ---
+
+--- Iteration 2/15 ---
+ Selected lambdas: 64
+ Current error: 0.47955288
+Sampling candidates
+Sampling candidates with scores: [1.10450353e-04 3.99324675e-04 7.67619867e-05 ... 9.23951223e-05
+ 3.98978283e-04 3.99312666e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 25
+Selected samples for update: 12
+New candidates added to selected set: 12
+Total selected lambdas after addition: 76
+No pruning needed
+[Iteration 2] Improvement: error 0.29968274 < best error 0.29968274
+Actual error: 0.29968274
+
+--- Iteration 3/15 | Colony: 0 ---
+
+--- Iteration 3/15 ---
+ Selected lambdas: 76
+ Current error: 0.29968274
+Sampling candidates
+Sampling candidates with scores: [1.10450353e-04 3.99324675e-04 7.67619869e-05 ... 9.23951224e-05
+ 3.98978282e-04 3.99312666e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 13
+Selected samples for update: 6
+New candidates added to selected set: 6
+Total selected lambdas after addition: 82
+No pruning needed
+[Iteration 3] Improvement: error 0.21420973 < best error 0.21420973
+Actual error: 0.21420973
+
+--- Iteration 4/15 | Colony: 0 ---
+
+--- Iteration 4/15 ---
+ Selected lambdas: 82
+ Current error: 0.21420973
+Sampling candidates
+Sampling candidates with scores: [1.10450353e-04 3.99324674e-04 7.67619871e-05 ... 9.23951227e-05
+ 3.98978282e-04 3.99312665e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 7
+Selected samples for update: 3
+New candidates added to selected set: 3
+Total selected lambdas after addition: 85
+No pruning needed
+[Iteration 4] Improvement: error 0.18574777 < best error 0.18574777
+Actual error: 0.18574777
+
+--- Iteration 5/15 | Colony: 0 ---
+
+--- Iteration 5/15 ---
+ Selected lambdas: 85
+ Current error: 0.18574777
+Sampling candidates
+Sampling candidates with scores: [1.10450353e-04 3.99324674e-04 7.67619874e-05 ... 9.23951229e-05
+ 3.98978282e-04 3.99312665e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 4
+Selected samples for update: 2
+New candidates added to selected set: 2
+Total selected lambdas after addition: 87
+No pruning needed
+[Iteration 5] Improvement: error 0.17272957 < best error 0.17272957
+Actual error: 0.17272957
+
+--- Iteration 6/15 | Colony: 0 ---
+
+--- Iteration 6/15 ---
+ Selected lambdas: 87
+ Current error: 0.17272957
+Sampling candidates
+Sampling candidates with scores: [1.10450353e-04 3.99324674e-04 7.67619877e-05 ... 9.23951231e-05
+ 3.98978281e-04 3.99312664e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 2
+Selected samples for update: 1
+New candidates added to selected set: 1
+Total selected lambdas after addition: 88
+No pruning needed
+[Iteration 6] Improvement: error 0.16759887 < best error 0.16759887
+Actual error: 0.16759887
+
+--- Iteration 7/15 | Colony: 0 ---
+
+--- Iteration 7/15 ---
+ Selected lambdas: 88
+ Current error: 0.16759887
+Sampling candidates
+Sampling candidates with scores: [1.10450354e-04 3.99324673e-04 7.67619880e-05 ... 9.23951234e-05
+ 3.98978281e-04 3.99312664e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 1
+Selected samples for update: 1
+New candidates added to selected set: 1
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 7] Improvement: error 0.16342009 < best error 0.16342009
+Actual error: 0.16342009
+
+--- Iteration 8/15 | Colony: 0 ---
+
+--- Iteration 8/15 ---
+ Selected lambdas: 89
+ Current error: 0.16342009
+Sampling candidates
+Sampling candidates with scores: [1.10450354e-04 3.99324672e-04 7.67619884e-05 ... 9.23951237e-05
+ 3.98978280e-04 3.99312663e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 8] No improvement: error 0.16342009 >= best error 0.16342009
+Actual error: 0.16342009
+
+--- Iteration 9/15 | Colony: 0 ---
+
+--- Iteration 9/15 ---
+ Selected lambdas: 89
+ Current error: 0.16342009
+Sampling candidates
+Sampling candidates with scores: [1.10450354e-04 3.99324672e-04 7.67619888e-05 ... 9.23951241e-05
+ 3.98978279e-04 3.99312663e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 9] No improvement: error 0.16342009 >= best error 0.16342009
+Actual error: 0.16342009
+
+--- Iteration 10/15 | Colony: 0 ---
+
+--- Iteration 10/15 ---
+ Selected lambdas: 89
+ Current error: 0.16342009
+Sampling candidates
+Sampling candidates with scores: [1.10450354e-04 3.99324671e-04 7.67619892e-05 ... 9.23951245e-05
+ 3.98978279e-04 3.99312662e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 10] No improvement: error 0.16342009 >= best error 0.16342009
+Actual error: 0.16342009
+
+--- Iteration 11/15 | Colony: 0 ---
+
+--- Iteration 11/15 ---
+ Selected lambdas: 89
+ Current error: 0.16342009
+Sampling candidates
+Sampling candidates with scores: [1.10450355e-04 3.99324670e-04 7.67619897e-05 ... 9.23951249e-05
+ 3.98978278e-04 3.99312661e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 11] No improvement: error 0.16342009 >= best error 0.16342009
+Actual error: 0.16342009
+
+--- Iteration 12/15 | Colony: 0 ---
+
+--- Iteration 12/15 ---
+ Selected lambdas: 89
+ Current error: 0.16342009
+Sampling candidates
+Sampling candidates with scores: [1.10450355e-04 3.99324669e-04 7.67619903e-05 ... 9.23951254e-05
+ 3.98978277e-04 3.99312660e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 12] No improvement: error 0.16342009 >= best error 0.16342009
+Actual error: 0.16342009
+
+--- Iteration 13/15 | Colony: 0 ---
+
+--- Iteration 13/15 ---
+ Selected lambdas: 89
+ Current error: 0.16342009
+Sampling candidates
+Sampling candidates with scores: [1.10450356e-04 3.99324668e-04 7.67619909e-05 ... 9.23951259e-05
+ 3.98978276e-04 3.99312659e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 13] No improvement: error 0.16342009 >= best error 0.16342009
+Actual error: 0.16342009
+
+--- Iteration 14/15 | Colony: 0 ---
+
+--- Iteration 14/15 ---
+ Selected lambdas: 89
+ Current error: 0.16342009
+Sampling candidates
+Sampling candidates with scores: [1.10450356e-04 3.99324667e-04 7.67619916e-05 ... 9.23951265e-05
+ 3.98978275e-04 3.99312658e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 14] No improvement: error 0.16342009 >= best error 0.16342009
+Actual error: 0.16342009
+
+--- Iteration 15/15 | Colony: 0 ---
+
+--- Iteration 15/15 ---
+ Selected lambdas: 89
+ Current error: 0.16342009
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 50
+Selected samples for update: 25
+New candidates added to selected set: 25
+Total selected lambdas after addition: 65
+No pruning needed
+[Iteration 1] Improvement: error 0.76786607 < best error 0.76786607
+Actual error: 0.76786607
+
+--- Iteration 2/15 | Colony: 3 ---
+
+--- Iteration 2/15 ---
+ Selected lambdas: 65
+ Current error: 0.76786607
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 25
+Selected samples for update: 12
+New candidates added to selected set: 12
+Total selected lambdas after addition: 77
+No pruning needed
+[Iteration 2] No improvement: error 0.81409606 >= best error 0.76786607
+Actual error: 0.81409606
+
+--- Iteration 3/15 | Colony: 3 ---
+
+--- Iteration 3/15 ---
+ Selected lambdas: 77
+ Current error: 0.81409606
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 13
+Selected samples for update: 6
+New candidates added to selected set: 6
+Total selected lambdas after addition: 83
+No pruning needed
+[Iteration 3] No improvement: error 0.84088522 >= best error 0.76786607
+Actual error: 0.84088522
+
+--- Iteration 4/15 | Colony: 3 ---
+
+--- Iteration 4/15 ---
+ Selected lambdas: 83
+ Current error: 0.84088522
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 7
+Selected samples for update: 3
+New candidates added to selected set: 3
+Total selected lambdas after addition: 86
+No pruning needed
+[Iteration 4] No improvement: error 0.85419968 >= best error 0.76786607
+Actual error: 0.85419968
+
+--- Iteration 5/15 | Colony: 3 ---
+
+--- Iteration 5/15 ---
+ Selected lambdas: 86
+ Current error: 0.85419968
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 4
+Selected samples for update: 2
+New candidates added to selected set: 2
+Total selected lambdas after addition: 88
+No pruning needed
+[Iteration 5] No improvement: error 0.86264119 >= best error 0.76786607
+Actual error: 0.86264119
+
+--- Iteration 6/15 | Colony: 3 ---
+
+--- Iteration 6/15 ---
+ Selected lambdas: 88
+ Current error: 0.86264119
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 2
+Selected samples for update: 1
+New candidates added to selected set: 1
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 6] No improvement: error 0.86677994 >= best error 0.76786607
+Actual error: 0.86677994
+
+--- Iteration 7/15 | Colony: 3 ---
+
+--- Iteration 7/15 ---
+ Selected lambdas: 89
+ Current error: 0.86677994
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 1
+Selected samples for update: 1
+New candidates added to selected set: 1
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 7] No improvement: error 0.87088763 >= best error 0.76786607
+Actual error: 0.87088763
+
+--- Iteration 8/15 | Colony: 3 ---
+
+--- Iteration 8/15 ---
+ Selected lambdas: 90
+ Current error: 0.87088763
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 8] No improvement: error 0.87088763 >= best error 0.76786607
+Actual error: 0.87088763
+
+--- Iteration 9/15 | Colony: 3 ---
+
+--- Iteration 9/15 ---
+ Selected lambdas: 90
+ Current error: 0.87088763
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 9] No improvement: error 0.87088763 >= best error 0.76786607
+Actual error: 0.87088763
+
+--- Iteration 10/15 | Colony: 3 ---
+
+--- Iteration 10/15 ---
+ Selected lambdas: 90
+ Current error: 0.87088763
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 10] No improvement: error 0.87088763 >= best error 0.76786607
+Actual error: 0.87088763
+
+--- Iteration 11/15 | Colony: 3 ---
+
+--- Iteration 11/15 ---
+ Selected lambdas: 90
+ Current error: 0.87088763
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 49
+Selected samples for update: 24
+New candidates added to selected set: 24
+Total selected lambdas after addition: 64
+No pruning needed
+[Iteration 1] Improvement: error 0.34918034 < best error 0.34918034
+Actual error: 0.34918034
+
+--- Iteration 2/15 | Colony: 1 ---
+
+--- Iteration 2/15 ---
+ Selected lambdas: 64
+ Current error: 0.34918034
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 25
+Selected samples for update: 12
+New candidates added to selected set: 12
+Total selected lambdas after addition: 76
+No pruning needed
+[Iteration 2] Improvement: error 0.30409848 < best error 0.30409848
+Actual error: 0.30409848
+
+--- Iteration 3/15 | Colony: 1 ---
+
+--- Iteration 3/15 ---
+ Selected lambdas: 76
+ Current error: 0.30409848
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 13
+Selected samples for update: 6
+New candidates added to selected set: 6
+Total selected lambdas after addition: 82
+No pruning needed
+[Iteration 3] No improvement: error 0.36127717 >= best error 0.30409848
+Actual error: 0.36127717
+
+--- Iteration 4/15 | Colony: 1 ---
+
+--- Iteration 4/15 ---
+ Selected lambdas: 82
+ Current error: 0.36127717
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 7
+Selected samples for update: 3
+New candidates added to selected set: 3
+Total selected lambdas after addition: 85
+No pruning needed
+[Iteration 4] No improvement: error 0.38879006 >= best error 0.30409848
+Actual error: 0.38879006
+
+--- Iteration 5/15 | Colony: 1 ---
+
+--- Iteration 5/15 ---
+ Selected lambdas: 85
+ Current error: 0.38879006
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 4
+Selected samples for update: 2
+New candidates added to selected set: 2
+Total selected lambdas after addition: 87
+No pruning needed
+[Iteration 5] No improvement: error 0.40695396 >= best error 0.30409848
+Actual error: 0.40695396
+
+--- Iteration 6/15 | Colony: 1 ---
+
+--- Iteration 6/15 ---
+ Selected lambdas: 87
+ Current error: 0.40695396
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 2
+Selected samples for update: 1
+New candidates added to selected set: 1
+Total selected lambdas after addition: 88
+No pruning needed
+[Iteration 6] No improvement: error 0.41587536 >= best error 0.30409848
+Actual error: 0.41587536
+
+--- Iteration 7/15 | Colony: 1 ---
+
+--- Iteration 7/15 ---
+ Selected lambdas: 88
+ Current error: 0.41587536
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 1
+Selected samples for update: 1
+New candidates added to selected set: 1
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 7] No improvement: error 0.42465116 >= best error 0.30409848
+Actual error: 0.42465116
+
+--- Iteration 8/15 | Colony: 1 ---
+
+--- Iteration 8/15 ---
+ Selected lambdas: 89
+ Current error: 0.42465116
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 8] No improvement: error 0.42465116 >= best error 0.30409848
+Actual error: 0.42465116
+
+--- Iteration 9/15 | Colony: 1 ---
+
+--- Iteration 9/15 ---
+ Selected lambdas: 89
+ Current error: 0.42465116
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 9] No improvement: error 0.42465116 >= best error 0.30409848
+Actual error: 0.42465116
+
+--- Iteration 10/15 | Colony: 1 ---
+
+--- Iteration 10/15 ---
+ Selected lambdas: 89
+ Current error: 0.42465116
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 10] No improvement: error 0.42465116 >= best error 0.30409848
+Actual error: 0.42465116
+
+--- Iteration 11/15 | Colony: 1 ---
+
+--- Iteration 11/15 ---
+ Selected lambdas: 89
+ Current error: 0.42465116
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 11] No improvement: error 0.42465116 >= best error 0.30409848
+Actual error: 0.42465116
+
+--- Iteration 12/15 | Colony: 1 ---
+
+--- Iteration 12/15 ---
+ Selected lambdas: 89
+ Current error: 0.42465116
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 15] No improvement: error 0.37739826 >= best error 0.37739826
+Actual error: 0.37739826
+STOP: raggiunto il numero massimo di iterazioni (15)
+Sampling candidates
+Sampling candidates with scores: [1.10450357e-04 3.99324666e-04 7.67619923e-05 ... 9.23951272e-05
+ 3.98978274e-04 3.99312657e-04]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 15] No improvement: error 0.16342009 >= best error 0.16342009
+Actual error: 0.16342009
+STOP: raggiunto il numero massimo di iterazioni (15)
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 90
+No pruning needed
+[Iteration 11] No improvement: error 0.87088763 >= best error 0.76786607
+Actual error: 0.87088763
+STOP: nessun miglioramento per 10 iterazioni consecutive.
+Sampling candidates
+Sampling candidates with scores: [0.00019972 0.00019972 0.00019972 ... 0.00019972 0.00019972 0.00019972]
+Total candidates sampled: 50
+Total candidates sampled: 50
+New candidates : 0
+Selected samples for update: 0
+New candidates added to selected set: 0
+Total selected lambdas after addition: 89
+No pruning needed
+[Iteration 12] No improvement: error 0.42465116 >= best error 0.30409848
+Actual error: 0.42465116
+STOP: nessun miglioramento per 10 iterazioni consecutive.
+Total unique lambdas selected: 257
+Final error (union): 0.1003
+
+ C_ref matrix (Ground Truth):
+[[0.4159 0.4206 0.3947]
+ [0.4206 0.4468 0.421 ]
+ [0.3947 0.421  0.4238]]
+
+C_e_final matrix (Empirical):
+[[0.4476 0.4476 0.4476]
+ [0.4476 0.4476 0.4476]
+ [0.4476 0.4476 0.4476]]
+
+--- Final Results ---
+Lambdas selected from all colonies: 257
+Final error (unione): 0.1003
+
+ C_ref matrix:
+[[0.4159483  0.42056979 0.39467757]
+ [0.42056979 0.44680905 0.42096067]
+ [0.39467757 0.42096067 0.42378018]]
+
+ C_e_union matrix:
+[[0.44762833 0.44762833 0.44762833]
+ [0.44762833 0.44762832 0.44762833]
+ [0.44762833 0.44762833 0.44762834]]
+Norma Frobenius  C_e_union: 0.10033570101116271
+Shape C_e_union: (3, 3)
+
+--- Colony Results ---
+Colony 0:
+  Selected lambdas: 89
+  Best configuration: [(0.7033700463529708, 0.0629251563072192, 0.23370479733980995), (0.4498728167751602, 0.4340005177672901, 0.11612666545754968), (0.2128766548666966, 0.4663482745621611, 0.3207750705711423), (0.0875076393744525, 0.0821529872141663, 0.8303393734113812), (0.3504577765996394, 0.153742565403321, 0.4957996579970396), (0.1756265015267998, 0.7524733612364003, 0.07190013723679989), (0.2123478129389847, 0.4863720969536713, 0.3012800901073441), (0.270227714970603, 0.6973818120340043, 0.03239047299539277), (0.1282779439366906, 0.703534796279653, 0.16818725978365645), (0.3589173634720325, 0.4530158898905969, 0.1880667466373706), (0.398208578486125, 0.3842144068993311, 0.21757701461454387), (0.0885399285093245, 0.2461921666695393, 0.6652679048211363), (0.3376659540378022, 0.5562349921820154, 0.10609905378018236), (0.7131009184312989, 0.2578592867460835, 0.02903979482261765), (0.7143827475288915, 0.2317986521675125, 0.053818600303595976), (0.3361615145013604, 0.3497287960562455, 0.31410968944239415), (0.0583414952488566, 0.6478045553166807, 0.29385394943446275), (0.4707915215437975, 0.3961382062050015, 0.13307027225120105), (0.2257124108159499, 0.4886599091368981, 0.28562768004715205), (0.3852861861710375, 0.0765051789366063, 0.5382086348923563), (0.1397511571209532, 0.8257872973867344, 0.034461545492312395), (0.2953659014037612, 0.1097709108495907, 0.5948631877466481), (0.3495893178084477, 0.3980162285376778, 0.2523944536538745), (0.1812785389768909, 0.668517849759619, 0.15020361126349002), (0.3966058706668912, 0.423735965847672, 0.1796581634854369), (0.7608217842245948, 0.1827400136725481, 0.056438202102857105), (0.5820654306067587, 0.342708128755455, 0.07522644063778627), (0.4133019887610096, 0.5131815015856526, 0.07351650965333778), (0.434240211945468, 0.4337422673665437, 0.13201752068798828), (0.2286674687608507, 0.7334714516933571, 0.0378610795457921), (0.2370556332872038, 0.7160367292258859, 0.04690763748691029), (0.3144979007981702, 0.3832617312475779, 0.3022403679542519), (0.1174725996559431, 0.6518262280511622, 0.23070117229289466), (0.0475709156926901, 0.139030642930153, 0.8133984413771569), (0.2043201428874472, 0.3943298683610497, 0.401349988751503), (0.1265708935381358, 0.7488560253438794, 0.12457308111798482), (0.1840805621443369, 0.6921216996665349, 0.1237977381891282), (0.1003677851939418, 0.4718185031270442, 0.42781371167901405), (0.4549683413903879, 0.360020719315738, 0.18501093929387413), (0.0962507070783132, 0.131683556355585, 0.7720657365661018), (0.3744329999581242, 0.2888171980170768, 0.33674980202479904), (0.8040128429996896, 0.1359413584818143, 0.060045798518496146), (0.5304298846198375, 0.0658589633771779, 0.4037111520029846), (0.1591289431849795, 0.4866487653837463, 0.3542222914312742), (0.0910783898859995, 0.4275974970322745, 0.481324113081726), (0.0677142432941889, 0.7904794956935131, 0.1418062610122981), (0.8576024024262727, 0.0102719658897782, 0.13212563168394909), (0.2089216508796913, 0.6367470659138739, 0.15433128320643485), (0.2508940143142831, 0.2305007812553429, 0.5186052044303741), (0.2044076898728545, 0.496355225016967, 0.2992370851101785), (0.3146120755461987, 0.2021328544218092, 0.4832550700319921), (0.6021170392927592, 0.1355418196346885, 0.26234114107255235), (0.6462384993316769, 0.3269284024535234, 0.026833098214799733), (0.0954669142768924, 0.6742598774925281, 0.2302732082305795), (0.8597194809069636, 0.0330668475268967, 0.1072136715661397), (0.2007838878622293, 0.6762391688816931, 0.12297694325607755), (0.3215520187177805, 0.0366196619208343, 0.6418283193613852), (0.4298483858461354, 0.5237043197746591, 0.04644729437920547), (0.5442861245351395, 0.1524953620533755, 0.30321851341148504), (0.7656774876286688, 0.0203715916460531, 0.21395092072527808), (0.1292209336876659, 0.7565762794957768, 0.11420278681655727), (0.0590836671499973, 0.8427372979834236, 0.0981790348665792), (0.3202372940235471, 0.6642864281565203, 0.015476277819932549), (0.6163109248950248, 0.0733688921213389, 0.3103201829836363), (0.0462672898531626, 0.4438809822504379, 0.5098517278963994), (0.3886056664224497, 0.5993797997845379, 0.012014533793012316), (0.2521400178154657, 0.5393980923615712, 0.2084618898229631), (0.3033619996024138, 0.1537402150592463, 0.54289778533834), (0.1618696126459377, 0.3018915219610421, 0.5362388653930202), (0.6205226405947172, 0.1305036401812807, 0.24897371922400213), (0.3220802474564577, 0.6602087827122635, 0.017710969831278844), (0.6427353839671588, 0.2909006344617222, 0.066363981571119), (0.4052579461495895, 0.2473316966570914, 0.34741035719331903), (0.161752660178664, 0.8308550157660862, 0.00739232405524981), (0.1510682713418657, 0.5707289997688472, 0.2782027288892871), (0.2086492846375338, 0.0023797180249652, 0.788970997337501), (0.2293154182439868, 0.0518536426285806, 0.7188309391274326), (0.6212607374484335, 0.3488850951348043, 0.029854167416762223), (0.3661674407858865, 0.4185083870170862, 0.21532417219702732), (0.0296134851143971, 0.4293461041126757, 0.5410404107729272), (0.4052860467733482, 0.4963810291312472, 0.09833292409540467), (0.0528774900934884, 0.4923583607853087, 0.4547641491212029), (0.527102477402772, 0.3352613534407832, 0.13763616915644472), (0.3425141889527669, 0.0683335354074471, 0.5891522756397859), (0.3208277228212405, 0.3781243695460851, 0.3010479076326744), (0.0047169107131422, 0.9488573849539764, 0.0464257043328814), (0.5091031485306984, 0.383891274406419, 0.1070055770628826), (0.0155730179146756, 0.4813030029191951, 0.5031239791661293), (0.4415746566980247, 0.5085469943862453, 0.04987834891572995)]
+  Best error: 0.1634
+  Selection criterion: heuristic
+Colony 1:
+  Selected lambdas: 89
+  Best configuration: [(0.7390295524000061, 0.0101782732298805, 0.25079217437011336), (0.6317113714806795, 0.141861572473424, 0.22642705604589652), (0.4707904259114213, 0.066596921122841, 0.4626126529657377), (0.0551358741813544, 0.3717400916359272, 0.5731240341827184), (0.0360416965348697, 0.9624731709707924, 0.001485132494337904), (0.5820654306067587, 0.342708128755455, 0.07522644063778627), (0.2509035822964948, 0.3635322496336925, 0.3855641680698127), (0.3206265863232498, 0.5036568195362743, 0.1757165941404759), (0.5516853927737833, 0.4301692064576574, 0.01814540076855936), (0.5042957157490929, 0.3535106333233884, 0.14219365092751868), (0.4141683029153215, 0.1602604513087971, 0.42557124577588146), (9.005944776558131e-05, 0.1462645105515128, 0.8536454300007216), (0.0529841176088553, 0.9011198404994216, 0.04589604189172314), (0.1634175923966028, 0.4983060059037125, 0.3382764016996847), (0.4823805688647173, 0.0191960375502175, 0.49842339358506516), (0.4085640609510656, 0.3523116431910944, 0.2391242958578399), (0.9152251185331364, 0.0298726072396947, 0.054902274227168923), (0.366700097614874, 0.0554755011426642, 0.5778244012424618), (0.7318546124601797, 0.1789289591158416, 0.0892164284239787), (0.1760499312191899, 0.8105993058009007, 0.013350762979909447), (0.5058498081830692, 0.4099686260782593, 0.08418156573867147), (0.4399532869330896, 0.4857983010204423, 0.07424841204646815), (0.2914693413978031, 0.5535321390632129, 0.15499851953898403), (0.1219083725325822, 0.305869246513118, 0.5722223809542998), (0.195526904142281, 0.3702837314215556, 0.4341893644361634), (0.2972603674117225, 0.4802623428192429, 0.22247728976903464), (0.2969715586738394, 0.0833636681493015, 0.6196647731768591), (0.2546220294991667, 0.2702692461587156, 0.4751087243421177), (0.4096968653197493, 0.3245724015916248, 0.26573073308862594), (0.1457088388047277, 0.2592240854584164, 0.5950670757368559), (0.1268481802992539, 0.1547877796604688, 0.7183640400402773), (0.3036685080183776, 0.1202763147574549, 0.5760551772241674), (0.0940138979978244, 0.2751567185415204, 0.6308293834606551), (0.1689713557525306, 0.2791939773780025, 0.5518346668694669), (0.3066952244677043, 0.672150124195379, 0.02115465133691663), (0.0392080625144685, 0.0547532915843074, 0.9060386459012241), (0.0599559161386963, 0.8400717038784616, 0.09997237998284203), (0.1367948565077806, 0.0183614237600582, 0.8448437197321612), (0.1910380435695102, 0.0374975928039366, 0.7714643636265531), (0.1829787317087674, 0.8021640638068785, 0.014857204484354014), (0.3033176124431124, 0.0146830813444796, 0.681999306212408), (0.0053869292452984, 0.9114916923372732, 0.0831213784174284), (0.3278939158750898, 0.1859771127875049, 0.48612897133740535), (0.2351078064648545, 0.2144031507143864, 0.5504890428207591), (0.010150237208226, 0.7037588277026832, 0.2860909350890908), (0.1068344111397629, 0.4592079991306944, 0.43395758972954274), (0.3376171942648442, 0.5357090933526303, 0.12667371238252545), (0.4404462676003601, 0.5003883554390931, 0.0591653769605468), (0.7831194938430635, 0.1018542667855031, 0.11502623937143344), (0.5893125527375981, 0.2373479993872149, 0.173339447875187), (0.2349190442023674, 0.5549161349925427, 0.2101648208050899), (0.1881065660623708, 0.3324058425931355, 0.47948759134449365), (0.8248210867148098, 0.0761678325835782, 0.09901108070161199), (0.1283816810510684, 0.7408854853489655, 0.13073283359996613), (0.3045107537191038, 0.0694427880957504, 0.6260464581851457), (0.3700533994325293, 0.0842250160458878, 0.5457215845215829), (0.1367456975463624, 0.0932939508877292, 0.7699603515659085), (0.2337451998608685, 0.0710716002564995, 0.695183199882632), (0.7090690939193098, 0.1065700095004717, 0.18436089658021848), (0.1301376439966787, 0.1225008101613952, 0.747361545841926), (0.0701875340803497, 0.530193980169619, 0.3996184857500312), (0.8144476605149179, 0.1155371190501615, 0.0700152204349206), (0.0969460965359678, 0.7049898376383097, 0.19806406582572256), (0.2356847655688692, 0.416310936945467, 0.3480042974856638), (0.1388577986129, 0.7290976133374438, 0.13204458804965613), (0.5296093882875121, 0.1451557415694997, 0.32523487014298813), (0.0708127086112342, 0.1967620301880657, 0.7324252612007001), (0.1094612240603766, 0.5759871286381212, 0.3145516473015022), (0.4005291639345098, 0.3338846810097201, 0.26558615505577005), (0.2953957161580667, 0.4048597624101089, 0.2997445214318244), (0.6226474869656405, 0.0820861075440665, 0.2952664054902929), (0.1523029309430603, 0.5941378324182365, 0.25355923663870317), (0.0073581725455786, 0.5002556569776365, 0.4923861704767849), (0.1171196712359742, 0.1940681813877236, 0.6888121473763021), (0.6267863929129457, 0.0177757630855141, 0.3554378440015402), (0.0272633614717462, 0.7768909632636987, 0.1958456752645551)]
+  Best error: 0.3041
+  Selection criterion: uncertainty
+Colony 2:
+  Selected lambdas: 90
+  Best configuration: [(0.0360416965348697, 0.9624731709707924, 0.001485132494337904), (0.4683510168168236, 0.1732607704729831, 0.3583882127101932), (0.3206265863232498, 0.5036568195362743, 0.1757165941404759), (0.5516853927737833, 0.4301692064576574, 0.01814540076855936), (0.366700097614874, 0.0554755011426642, 0.5778244012424618), (0.1634175923966028, 0.4983060059037125, 0.3382764016996847), (0.7318546124601797, 0.1789289591158416, 0.0892164284239787), (0.25, 0.75, 0.0), (0.0392080625144685, 0.0547532915843074, 0.9060386459012241), (0.1829787317087674, 0.8021640638068785, 0.014857204484354014), (0.3033176124431124, 0.0146830813444796, 0.681999306212408), (0.25, 0.125, 0.625), (0.1068344111397629, 0.4592079991306944, 0.43395758972954274), (0.3376171942648442, 0.5357090933526303, 0.12667371238252545), (0.75, 0.0, 0.25), (0.1590949868936139, 0.3536972071016417, 0.4872078060047444), (0.375, 0.25, 0.375), (0.3700533994325293, 0.0842250160458878, 0.5457215845215829), (0.0175990544339016, 0.1629763855991204, 0.8194245599669779), (0.625, 0.125, 0.25), (0.5296093882875121, 0.1451557415694997, 0.32523487014298813), (0.75, 0.25, 0.0), (0.5, 0.125, 0.375), (0.5820654306067587, 0.342708128755455, 0.07522644063778627), (0.5042957157490929, 0.3535106333233884, 0.14219365092751868), (0.4085640609510656, 0.3523116431910944, 0.2391242958578399), (0.625, 0.25, 0.125), (0.1222384447228403, 0.4243567146905711, 0.4534048405865886), (0.0, 0.5, 0.5), (0.25, 0.0, 0.75), (0.5, 0.375, 0.125), (0.0, 0.75, 0.25), (0.125, 0.0, 0.875), (0.0909849622095837, 0.2730651263530142, 0.6359499114374021), (0.2244375754553768, 0.1915725512319615, 0.5839898733126617), (0.875, 0.0, 0.125), (0.125, 0.875, 0.0), (0.0, 0.125, 0.875), (0.3045107537191038, 0.0694427880957504, 0.6260464581851457), (0.5, 0.0, 0.5), (0.1301376439966787, 0.1225008101613952, 0.747361545841926), (0.125, 0.25, 0.625), (0.1388577986129, 0.7290976133374438, 0.13204458804965613), (0.7390295524000061, 0.0101782732298805, 0.25079217437011336), (0.0, 1.0, 0.0), (0.375, 0.625, 0.0), (0.4141683029153215, 0.1602604513087971, 0.42557124577588146), (0.3417914311560628, 0.2693991231799231, 0.3888094456640141), (9.005944776558131e-05, 0.1462645105515128, 0.8536454300007216), (0.0, 0.0, 1.0), (0.25, 0.625, 0.125), (0.2969715586738394, 0.0833636681493015, 0.6196647731768591), (0.0599559161386963, 0.8400717038784616, 0.09997237998284203), (0.375, 0.125, 0.5), (1.0, 0.0, 0.0), (0.25, 0.25, 0.5), (0.1367456975463624, 0.0932939508877292, 0.7699603515659085), (0.2337451998608685, 0.0710716002564995, 0.695183199882632), (0.75, 0.125, 0.125), (0.8144476605149179, 0.1155371190501615, 0.0700152204349206), (0.0969460965359678, 0.7049898376383097, 0.19806406582572256), (0.375, 0.375, 0.25), (0.4005291639345098, 0.3338846810097201, 0.26558615505577005), (0.25, 0.5, 0.25), (0.4660237970386925, 0.3077757238463944, 0.22620047911491314), (0.0, 0.375, 0.625), (0.0529841176088553, 0.9011198404994216, 0.04589604189172314), (0.5, 0.25, 0.25), (0.1760499312191899, 0.8105993058009007, 0.013350762979909447), (0.125, 0.5, 0.375), (0.375, 0.0, 0.625), (0.0, 0.625, 0.375), (0.5, 0.5, 0.0), (0.2806360719296601, 0.2888072236117994, 0.4305567044585405), (0.125, 0.75, 0.125), (0.0053869292452984, 0.9114916923372732, 0.0831213784174284), (0.010150237208226, 0.7037588277026832, 0.2860909350890908), (0.125, 0.125, 0.75), (0.4404462676003601, 0.5003883554390931, 0.0591653769605468), (0.2377052064716134, 0.3809460608712166, 0.38134873265717), (0.875, 0.125, 0.0), (0.8248210867148098, 0.0761678325835782, 0.09901108070161199), (0.625, 0.0, 0.375), (0.1283816810510684, 0.7408854853489655, 0.13073283359996613), (0.0, 0.25, 0.75), (0.2132413234445641, 0.2131596448631503, 0.5735990316922857), (0.0339206606960373, 0.4383442861134303, 0.5277350531905325), (0.6226474869656405, 0.0820861075440665, 0.2952664054902929), (0.125, 0.375, 0.5), (0.6098803436247987, 0.1842249705297104, 0.2058946858454909)]
+  Best error: 0.3774
+  Selection criterion: uniform
+Colony 3:
+  Selected lambdas: 90
+  Best configuration: [(0.7390295524000061, 0.0101782732298805, 0.25079217437011336), (0.28035754044975214, 0.08989453670353455, 0.6297479228467133), (0.0360416965348697, 0.9624731709707924, 0.001485132494337904), (0.657381271833743, 0.17132260711444883, 0.1712961210518082), (0.5820654306067587, 0.342708128755455, 0.07522644063778627), (0.18165687727373855, 0.2938877234452725, 0.5244553992809889), (0.3206265863232498, 0.5036568195362743, 0.1757165941404759), (0.5516853927737833, 0.4301692064576574, 0.01814540076855936), (0.30737399268116156, 0.42220717562542204, 0.27041883169341646), (0.32354776443628225, 0.21814474801907058, 0.4583074875446471), (0.0529841176088553, 0.9011198404994216, 0.04589604189172314), (0.366700097614874, 0.0554755011426642, 0.5778244012424618), (0.18205877561639985, 0.46212908544657766, 0.35581213893702246), (0.22769712823767618, 0.23809491217310147, 0.5342079595892224), (0.6786548843400361, 0.1731109959235988, 0.14823411973636516), (0.46306098178097127, 0.4899062994327982, 0.04703271878623042), (0.1760499312191899, 0.8105993058009007, 0.013350762979909447), (0.181157578987603, 0.3005149012112804, 0.5183275198011167), (0.4433659049657008, 0.20859987143371847, 0.3480342236005808), (0.2969715586738394, 0.0833636681493015, 0.6196647731768591), (0.13908355301401262, 0.04051557139863785, 0.8204008755873495), (0.3484815228069804, 0.3546317318009484, 0.2968867453920712), (0.0848962344419666, 0.48956208697844045, 0.42554167857959296), (0.30223499387627506, 0.23800265747185712, 0.4597623486518678), (0.26802414108306244, 0.08663507466513515, 0.6453407842518024), (0.29704731482496166, 0.360035892509898, 0.34291679266514025), (0.0599559161386963, 0.8400717038784616, 0.09997237998284203), (0.3717666808030997, 0.5732097953138222, 0.055023523883078046), (0.41686469204449644, 0.012118741982948326, 0.5710165659725552), (0.32137700036931305, 0.10866444745297019, 0.5699585521777168), (0.2743745994370875, 0.37749484100830094, 0.3481305595546116), (0.1829787317087674, 0.8021640638068785, 0.014857204484354014), (0.17480425944469938, 0.3660958890894621, 0.45909985146583854), (0.4459584572642928, 0.513758448394915, 0.0402830943407923), (0.3033176124431124, 0.0146830813444796, 0.681999306212408), (0.0053869292452984, 0.9114916923372732, 0.0831213784174284), (0.3192599979209789, 0.4442760865907433, 0.2364639154882777), (0.3459291411888761, 0.0798306393630632, 0.5742402194480607), (0.31651310994496806, 0.544913048424312, 0.13857384163072003), (0.11527548184987252, 0.5514827472570027, 0.33324177089312473), (0.010150237208226, 0.7037588277026832, 0.2860909350890908), (0.3376171942648442, 0.5357090933526303, 0.12667371238252545), (0.5040673460740428, 0.3944356308127906, 0.10149702311316666), (0.4404462676003601, 0.5003883554390931, 0.0591653769605468), (0.3045107537191038, 0.0694427880957504, 0.6260464581851457), (0.0750454560179941, 0.4475615017232569, 0.47739304225874896), (0.8248210867148098, 0.0761678325835782, 0.09901108070161199), (0.1283816810510684, 0.7408854853489655, 0.13073283359996613), (0.3700533994325293, 0.0842250160458878, 0.5457215845215829), (0.4162719546463191, 0.11541703223991515, 0.4683110131137657), (0.13847707889007807, 0.7882668477272332, 0.07325607338268857), (0.2337451998608685, 0.0710716002564995, 0.695183199882632), (0.028597786622496152, 0.7561985798401574, 0.21520363353734656), (0.26107383971629766, 0.18226465890278054, 0.5566615013809219), (0.8144476605149179, 0.1155371190501615, 0.0700152204349206), (0.0969460965359678, 0.7049898376383097, 0.19806406582572256), (0.5357554507944485, 0.43819216653105125, 0.02605238267450022), (0.1388577986129, 0.7290976133374438, 0.13204458804965613), (0.6124248289969627, 0.3251255820665762, 0.06244958893646093), (0.17615008340518912, 0.289976893253344, 0.5338730233414669), (0.3841928143681414, 0.12926296040609045, 0.4865442252257682), (0.6226474869656405, 0.0820861075440665, 0.2952664054902929), (0.7205907132938222, 0.20225354479929625, 0.07715574190688157), (0.03807825678154029, 0.5678448096745716, 0.3940769335438881), (0.003614327356873417, 0.5337345230766596, 0.462651149566467)]
+  Best error: 0.7679
+  Selection criterion: random
+
+--- Debugging Colony Results ---
+Plots saved as PNG files.
+Colonie raccolte: ['uniform', 'heuristic', 'random', 'uncertainty']
