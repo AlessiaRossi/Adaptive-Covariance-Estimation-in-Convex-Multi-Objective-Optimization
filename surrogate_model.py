@@ -60,7 +60,7 @@ def optimize_for_lambda(lambdas, x_range=(-2, 2)):
             best_result = result
 
     if best_result is None:
-        raise RuntimeError("Ottimizzazione fallita")
+        raise RuntimeError("Ottimization failed")
 
     return best_result.x, best_result.fun
 
@@ -200,9 +200,8 @@ def hessian_estimation_for_lambda(lambdas, delta=0.01, base_seed=None):
         perturbed_losses: 3x3 covariance matrix.
         x_opt: Optimal x for the base lambda vector.
 
-    #descrive quanto cambia il valore ottimale del loss scalarizzato rispetto ai pesi
     """
-    # Converti lambdas in un array NumPy per supportare operazioni come .copy()
+
     lambdas = np.array(lambdas)
 
     # Calculate the optimal loss at the base lambda point
@@ -556,7 +555,7 @@ def plot_optimal_values_surface():
     valid_lambda2 = np.array(valid_lambda2)
     valid_lambda3 = np.array(valid_lambda3)
     optimal_losses = np.array(optimal_losses)
-    optimal_x_values = np.array(optimal_x_values)
+
 
     fig = plt.figure(figsize=(12, 10))
     ax = fig.add_subplot(111, projection='3d')
@@ -842,21 +841,11 @@ def plot_gp_surface_with_test_points_enhanced(model, X_train_orig, y_train_orig,
 
 
 def train_and_prepare_surrogate(data, n_training=100, random_state=42):
-    """
-    Allena un modello surrogato e restituisce un dizionario compatibile con ACOActiveLearner.
+    ''' Train a surrogate model using Gaussian Process Regression on the provided data. '''
 
-    Parameters:
-    data: DataFrame con i dati di input (lambda1, lambda2) e target (sensitivity_norm)
-    n_training: Numero di campioni da usare per il training
-    random_state: Seed per la riproducibilità
-
-    Returns:
-    surrogate_model: Dizionario contenente il modello surrogato e gli scaler
-    """
-    # Allena il modello surrogato
     model, X_train, X_test, y_train, y_test, scaler_X, scaler_y = fit_gp_model(data, n_training, random_state)
 
-    # Prepara il dizionario del modello surrogato
+    # Prepare the surrogate model dictionary
     surrogate_model = {
         'model': model,
         'scaler_X': scaler_X,

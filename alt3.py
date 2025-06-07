@@ -2,13 +2,10 @@ import pandas as pd
 import numpy as np
 import random
 from collections import defaultdict
-from surrogate_model import fit_gp_model, optimize_for_lambda, hessian_estimation_for_lambda, \
-    estimate_local_covariances_from_lambdas, load_lambda_covariance_data, train_and_prepare_surrogate, evaluate_model
+from surrogate_model import fit_gp_model, optimize_for_lambda, load_lambda_covariance_data, train_and_prepare_surrogate, evaluate_model
 import matplotlib.pyplot as plt
 import os
 import joblib
-from scipy.spatial.distance import cdist
-from sklearn.metrics import mean_squared_error, r2_score
 import concurrent.futures
 from filelock import FileLock
 import time
@@ -22,20 +19,21 @@ PERTURBATION_STRENGTH = 0.025
 
 
 class ACOActiveLearner:
-    def __init__(self, lambda_data, surrogate_model=None, rho=0.1, random_state=GLOBAL_SEED):
+    def __init__(self, lambda_data, surrogate_model=None, rho=0.1):
+        ''' Initialize the ACOActiveLearner with lambda data, surrogate model, and parameters '''
         self.lambda_data = lambda_data.copy()
         self.lambda_data['lambda3'] = 1 - self.lambda_data['lambda1'] - self.lambda_data['lambda2']
         self.lambdas = self.lambda_data[['lambda1', 'lambda2', 'lambda3']].values
 
-        self.tau = defaultdict(lambda: 1.0)
-        self.eta = {}
+        self.tau = defaultdict(lambda: 1.0) # Pheromone levels
+        self.eta = {} # Heuristic values
         self.surrogate = surrogate_model
 
-        self.Selected = set()
-        self.C_e = None
+        self.Selected = set()  # Selected lambdas
+        self.C_e = None   # Empirical covariance matrix
 
-        self.epsilon_threshold = 1e-2
-        self.rho = rho
+        self.epsilon_threshold = 1e-2 # Convergence threshold
+        self.rho = rho # Pheromone evaporation rate
         self.x_opt_cache = {}  # Cache for x_opt values
 
         self.random_state = np.random.RandomState(GLOBAL_SEED)
@@ -131,68 +129,49 @@ class ACOActiveLearner:
         print(f"Total candidates sampled: {len(sampled)}")
         return sampled
 
-    def run_aco_active_learning(self, C_ref, archive_data, n_ants=150,
-                                alpha=1.0, beta=1.0,
-                                epsilon=None, budget=10, retrain_every=6,
-                                n_init_diverse=40, exclude_lambdas=None, random_state=GLOBAL_SEED,
-                                min_lambda=10, top_k=20,
-                                model_path="surrogate_modelDTLZ2.pkl", reload_surrogate=True,
-                                colony_id=None, selection_criterion="heuristic"):  # <--- aggiungi selection_criterion
-        ''' Run the Ant Colony Optimization (ACO) active learning algorithm to iteratively select
-    a diverse and informative set of lambdas that minimize the error between the empirical
-    covariance matrix and the reference matrix C_ref.
-
-    At each iteration:
-      - Candidates are sampled based on pheromone and heuristic values.
-      - The incremental error (delta_k) for each candidate is computed.
-      - The best candidates (with lowest delta_k) are selected and added to the set.
-      - Pheromones are updated based on the improvement in error.
-      - If the number of selected lambdas exceeds a threshold, pruning is performed to keep only the most diverse ones.
-      - The best configuration (with the lowest error so far) is tracked.
-
-    The process stops if the error drops below epsilon or the number of selected lambdas falls below min_lambda.
-    '''
+    def run_aco_active_learning(self, C_ref,alpha=1.0, beta=1.0,epsilon=None, budget=10, n_init_diverse=40,min_lambda=10, top_k=20,model_path="surrogate_modelDTLZ2.pkl", reload_surrogate=True,colony_id=None, selection_criterion="heuristic"):
+        ''' Run the ACO active learning algorithm.'''
         if epsilon is None:
             epsilon = 1e-6
+
+        # Initialize the selected lambdas and compute the initial empirical covariance matrix.
         if len(self.Selected) == 0:
             self.Selected = set(self.select_diverse_lambdas(n_select=n_init_diverse, min_dist=0.053))
             self.C_e = self.compute_Ce_from_lambdas(self.Selected)
+
         val_count = len(self.Selected)
         print(f"Nummber of selected lambdas: {val_count}")
+
+        # Initialize variables for tracking the best error and configuration.
         best_error = float('inf')
         best_config = None
         error_list = []
         max_iter = budget
         last_mtime = None
-        no_improve_counter = 0  # <--- Inizializza contatore
+        no_improve_counter = 0
         selected_count_list = []
         selected_history = []
 
-        # --- Parametri convergenza ---
-        N_conv = 10
-        delta_conv = 1e-4
 
         for iter_idx in range(max_iter):
-
             print(f"\n--- Iteration {iter_idx + 1}/{max_iter} | Colony: {colony_id} ---", flush=True)
             selected_history.append(list(self.Selected))
 
-            # --- reload modello surrogato se richiesto ---
+            # Reload the surrogate model if required.
             if reload_surrogate and model_path is not None:
                 self.surrogate, last_mtime = maybe_reload_surrogate(self.surrogate, model_path, last_mtime)
             print(f"\n--- Iteration {iter_idx + 1}/{max_iter} ---", flush=True)
             print(f" Selected lambdas: {len(self.Selected)}", flush=True)
-            print(
-                f" Current error: {np.linalg.norm(C_ref - self.C_e, ord='fro'):.8f}" if self.C_e is not None else "Current error: N/A",
-                flush=True)
+            print(f" Current error: {np.linalg.norm(C_ref - self.C_e, ord='fro'):.8f}" if self.C_e is not None else "Current error: N/A",flush=True)
 
-            # 1. Sampling new candidates
+            # 1. Sample new candidates based on the selection criterion.
             if selection_criterion == "heuristic":
-                # Usa sia feromone che euristica
+                # Use heuristic eta and pheromone tau
                 candidates = self.sample_candidates(n_ants=top_k, alpha=alpha, beta=beta, random_state=GLOBAL_SEED)
             else:
-                # Usa solo feromone (beta=0)
+                # Use only pheromone tau (beta=0.0)
                 candidates = self.sample_candidates(n_ants=top_k, alpha=alpha, beta=0.0, random_state=GLOBAL_SEED)
+
             # Exclude already selected lambdas
             new_candidates = [lam for lam in candidates if lam not in self.Selected]
             print(f"Total candidates sampled: {len(candidates)}")
@@ -203,15 +182,15 @@ class ACOActiveLearner:
             for lam in new_candidates:
                 delta_k = self.compute_delta_k(C_ref, lam)
                 delta_k_list.append((lam, delta_k))
-            # Sort by delta_k
+            # Sort candidates by delta_k and select the top half.
             delta_k_list.sort(key=lambda x: x[1])
             selected_candidates = [lam for lam, _ in delta_k_list[:max(1, len(delta_k_list) // 2)]]
             print(f"Selected samples for update: {len(selected_candidates)}")
 
+            # 3: Update pheromones and add new candidates to the selected set.
             self.evaporate_pheromones()
             self.update_pheromones(selected_candidates, C_ref)
 
-            # 3. Add new candidates to the selected set
             n_added = 0
             for lam in selected_candidates:
                 lam_tuple = tuple(lam)
@@ -221,7 +200,7 @@ class ACOActiveLearner:
             print(f"New candidates added to selected set: {n_added}")
             print(f"Total selected lambdas after addition: {len(self.Selected)}")
 
-            # 4. Pruning
+            # 4. Pruning : Prune the selected lambdas if their count exceeds the maximum allowed.
             max_lambdas = 175  # max number of lambdas to keep
             if len(self.Selected) > max_lambdas:
                 before_pruning = set(self.Selected)
@@ -233,40 +212,37 @@ class ACOActiveLearner:
             else:
                 print("No pruning needed")
 
+            # Update the empirical covariance matrix and compute the current error.
             self.C_e = self.compute_Ce_from_lambdas(self.Selected)
-            # Calcola l'errore corrente
             if self.C_e is not None:
                 error = np.linalg.norm(C_ref - self.C_e, ord='fro')
             else:
                 error = None
-            error_list.append(error)  # Aggiungi l'errore alla lista
+            error_list.append(error)
 
-            # Aggiungi il numero di campioni selezionati
+            # Update the best error and configuration if an improvement is found.
             selected_count_list.append(len(self.Selected))
-            # --- Early stopping: aggiorna contatore ---
+            # Early stopping
             if error is not None and error < best_error:
                 best_error = error
                 best_config = list(self.Selected)
                 print(f"[Iteration {iter_idx + 1}] Improvement: error {error:.8f} < best error {best_error:.8f}")
-                no_improve_counter = 0  # reset se migliora
+                no_improve_counter = 0
             else:
                 print(f"[Iteration {iter_idx + 1}] No improvement: error {error:.8f} >= best error {best_error:.8f}")
-                no_improve_counter += 1  # <--- incrementa se non migliora
+                no_improve_counter += 1
 
             print(f"Actual error: {error:.8f}" if error is not None else "Actual error: N/A")
-            # print(f"Best configuration: {best_config} with error: {best_error:.8f}")
-            # --- Criterio di arresto classico ---
+
+            # Stopping criteria: convergence or lack of improvement.
             if (error is not None and error < epsilon) or (len(self.Selected) < min_lambda):
                 print(f"STOP: error < {epsilon} or selected < {min_lambda}")
-                # Always return the tuple
                 return self.Selected, self.C_e, error_list, selected_count_list, best_config, best_error
             if no_improve_counter >= 10:
-                print(f"STOP: nessun miglioramento per 10 iterazioni consecutive.")
-                # Always return the tuple
+                print(f"STOP: no improvement for 10 consecutive iterations.")
                 return self.Selected, self.C_e, error_list, selected_count_list, best_config, best_error
         else:
-            print(f"STOP: raggiunto il numero massimo di iterazioni ({max_iter})")
-        # Always return the tuple at the end
+            print(f"STOP: maximum number of iterations reached ({max_iter})")
         return self.Selected, self.C_e, error_list, selected_count_list, best_config, best_error
 
     def compute_Ce_from_lambdas(self, lambdas_list):
@@ -288,19 +264,18 @@ class ACOActiveLearner:
         return C_e
 
     def compute_delta_k(self, C_ref, lam):
-        ''' Compute the incremental change in error (delta_k) when adding a new lambda to the current set of selected lambdas.
+        ''' Compute the change in error (delta_k) when adding a new lambda to the selected set.'''
 
-        If no lambdas have been selected yet, it computes the L1 norm (sum of absolute differences)
-      between the reference matrix C_ref and the empirical matrix computed using only the new lambda.
-      The result is negated so that a lower error means a higher (better) delta_k.'''
-
+        # If no lambdas are currently selected, compute the empirical covariance matrix for the single lambda.
         lam_tuple = tuple(lam)
         if not self.Selected:
             C_e_single = self.compute_Ce_from_lambdas([lam_tuple])
             delta_k = -np.sum(np.abs(C_ref - C_e_single))  # norm L1
         else:
+            # Compute the empirical covariance matrix before and after adding the new lambda.
             C_e_old = self.compute_Ce_from_lambdas(list(self.Selected))
             C_e_new = self.compute_Ce_from_lambdas(list(self.Selected) + [lam_tuple])
+            # Calculate the change in error (delta_k) as the difference in L1 norms.
             delta_k = np.sum(np.abs(C_ref - C_e_new)) - np.sum(np.abs(C_ref - C_e_old))
         return delta_k
 
@@ -341,14 +316,10 @@ def sample_uniform_simplex(n, d=3, random_state=GLOBAL_SEED):
     Sample n points (or as close as possible) uniformly from the (d-1)-simplex (sum=1, all >=0)
     using a regular grid (combinatorial approach). For d=3, this creates a triangular grid.
     """
-
-    # Determina il livello della griglia (più alto = più punti)
-    # Scegli il livello più vicino a n
     def num_points(level, d):
         from math import comb
         return comb(level + d - 1, d - 1)
 
-    # Trova il livello più vicino a n
     level = 1
     while num_points(level, d) < n:
         level += 1
@@ -361,7 +332,6 @@ def sample_uniform_simplex(n, d=3, random_state=GLOBAL_SEED):
             lam2 = j / level
             lam3 = k / level
             points.append((lam1, lam2, lam3))
-    # Shuffle per randomizzare l'ordine (opzionale)
     rng = np.random.RandomState(random_state if random_state is not None else GLOBAL_SEED)
     rng.shuffle(points)
     return points[:n]
@@ -375,22 +345,25 @@ def sample_random_simplex(n, d=3, random_state=GLOBAL_SEED):
     return [tuple(row) for row in samples]
 
 
-def run_single_colony(colony_id, archive_data, gp_model, C_ref, params, already_selected=None, random_state=GLOBAL_SEED,
-                      selection_criterion="heuristic"):
+def run_single_colony(colony_id, archive_data, gp_model, C_ref, params, already_selected=None, random_state=GLOBAL_SEED,selection_criterion="heuristic"):
+    '''Execute a single colony in the ACO (Ant Colony Optimization) active learning process.'''
     np.random.seed(random_state)
     random.seed(random_state)
+    # Initialize the ACOActiveLearner instance
     print(f"Colony {colony_id}: starting ")
     aco = ACOActiveLearner(archive_data, gp_model)
+    # Compute heuristic values (eta) for the lambdas
     print(f"Colony {colony_id}: calculating heuristic eta")
     aco.compute_heuristic()
+    # Select initial diverse lambdas based on the selection criterion
     print(f"Colony {colony_id}: selecting initial diverse lambdas with criterion: {selection_criterion}")
     if already_selected is None:
         already_selected = set()
     n_init = params['n_init_diverse']
 
-    # --- Selezione iniziale senza duplicati nella stessa colonia ---
-    initial = []
+    # Initial selection of lambdas based on the specified criterion
     if selection_criterion == "heuristic":
+        # Use heuristic values and enforce a minimum distance between lambdas
         min_dist = 0.053
         initial = aco.select_diverse_lambdas(
             n_select=n_init,
@@ -399,6 +372,7 @@ def run_single_colony(colony_id, archive_data, gp_model, C_ref, params, already_
             random_state=GLOBAL_SEED
         )
     elif selection_criterion == "uncertainty":
+        # Use uncertainty (standard deviation) from the surrogate model and enforce a minimum distance
         min_dist = 0.053
         X = archive_data[['lambda1', 'lambda2']].values
         X_scaled = gp_model['scaler_X'].transform(X)
@@ -412,21 +386,23 @@ def run_single_colony(colony_id, archive_data, gp_model, C_ref, params, already_
             random_state=GLOBAL_SEED
         )
     elif selection_criterion == "uniform":
+        # Uniform sampling from the simplex
         initial = sample_uniform_simplex(n_init, d=3)
         initial = [lam for lam in initial if tuple(lam) not in already_selected]
     elif selection_criterion == "random":
+        # Random sampling from the simplex
         initial = sample_random_simplex(n_init, d=3, random_state=GLOBAL_SEED)
         initial = [lam for lam in initial if tuple(lam) not in already_selected]
     else:
         raise ValueError(f"Unknown selection_criterion: {selection_criterion}")
 
-    # Rimuovi eventuali duplicati (precauzione)
+    # Remove duplicates from the initial selection
     initial = list({tuple(lam): lam for lam in initial}.values())
     aco.Selected = set(initial)
     already_selected.update(aco.Selected)
     print(f"Colony {colony_id}: selected {len(aco.Selected)} initial diverse lambdas")
 
-    # --- Passa il criterio di selezione a run_aco_active_learning ---
+    # Run the ACO active learning process
     Selected, C_e, error_list, selected_count_list, best_config, best_error = aco.run_aco_active_learning(
         C_ref=C_ref,
         archive_data=archive_data,
@@ -444,9 +420,10 @@ def run_single_colony(colony_id, archive_data, gp_model, C_ref, params, already_
         model_path=params.get('model_path', 'surrogate_model.pkl'),
         reload_surrogate=True,
         colony_id=colony_id,
-        selection_criterion=selection_criterion  # <--- Passa il criterio
+        selection_criterion=selection_criterion
     )
 
+    # Return the results of the colony
     return {
         "selected": list(Selected),
         "error_list": error_list,
@@ -492,7 +469,7 @@ def maybe_reload_surrogate(local_model, model_path="surrogate_globalDTLZ2.pkl", 
 def plot_results(colony_results, criteri_colonie):
     colors = ['blue', 'green', 'orange', 'red', 'purple', 'cyan']
 
-    # 1. Grafico dell'errore per iterazione
+    # 1. Graph of error per iteration for each criterion
     plt.figure(figsize=(10, 6))
     for idx, criterion in enumerate(criteri_colonie):
         res = colony_results[criterion]
@@ -507,7 +484,7 @@ def plot_results(colony_results, criteri_colonie):
     plt.savefig("error_per_iteration.png", dpi=300)
     plt.show()
 
-    # 2. Grafico del numero di campioni selezionati per iterazione
+    # 2. Graph of the number of selected samples per iteration for each criterion
     plt.figure(figsize=(10, 6))
     for idx, criterion in enumerate(criteri_colonie):
         res = colony_results[criterion]
@@ -523,7 +500,7 @@ def plot_results(colony_results, criteri_colonie):
     plt.savefig("selected_samples_per_iteration.png", dpi=300)
     plt.show()
 
-    # 3. Grafico a barre del valore di errore più basso raggiunto
+    # 3. Graph of the lowest error achieved for each criterion
     plt.figure(figsize=(8, 6))
     lowest_errors = [min(colony_results[criterion].get("error_list", [float('inf')])) for criterion in criteri_colonie]
     plt.bar(criteri_colonie, lowest_errors, color=colors[:len(criteri_colonie)])
@@ -539,6 +516,8 @@ def plot_results(colony_results, criteri_colonie):
 
 def main():
     print("Synergy iterativa ACO ↔ Active Learning")
+
+    # Define file paths for input data and model
     archive_file = 'losses_cov1.csv'
     ground_truth_file = 'results_covariance1.csv'
     model_path = 'surrogate_model1.pkl'
@@ -552,6 +531,7 @@ def main():
     C_ref = results_df.values
     print(f" C_ref shape: {C_ref.shape}", flush=True)
 
+    # Define parameters for the ACO process
     params = dict(
         n_ants=550,
         top_k=50,
@@ -565,11 +545,11 @@ def main():
     )
     print(f"Parameters: {params}", flush=True)
 
+    # Define the number of colonies and selection criteria
     n_colonies = 4
-    # all_best_configs = []
-    # all_best_errors = []
-    criteri_colonie = ["heuristic", "uncertainty", "uniform", "random"]  # scegli quelli che vuoi
+    criteri_colonie = ["heuristic", "uncertainty", "uniform", "random"]
 
+    # Run colonies in parallel using a ProcessPoolExecutor
     with concurrent.futures.ProcessPoolExecutor(max_workers=n_colonies) as executor:
         futures = [
             executor.submit(
@@ -591,12 +571,13 @@ def main():
 
     # Combine all selected lambdas from all colonies
     all_selected_unique = list({
-                                   tuple(lam): lam
-                                   for res in colony_results.values()
-                                   if res["best_config"] is not None and isinstance(res["best_config"], list)
-                                   for lam in res["best_config"]}.values())
+       tuple(lam): lam
+       for res in colony_results.values()
+       if res["best_config"] is not None and isinstance(res["best_config"], list)
+       for lam in res["best_config"]}.values())
     print(f"Total unique lambdas selected: {len(all_selected_unique)}")
 
+    # Compute the final empirical covariance matrix
     C_e_final = ACOActiveLearner(archive_data, gp_model).compute_Ce_from_lambdas(all_selected_unique)
     final_error = np.linalg.norm(C_ref - C_e_final, ord='fro') if C_e_final is not None else None
     print(f"Final error (union): {final_error:.4f}")
@@ -631,19 +612,8 @@ def main():
         print(f"  Best error: {res['best_error']:.4f}")
         print(f"  Selection criterion: {res['criterion']}")
 
-    print("\n--- Debugging Colony Results ---")
-    criteri_colonie = ["heuristic", "uncertainty", "uniform", "random"]  # Modifica se necessario
     plot_results(colony_results, criteri_colonie)
     print("Plots saved as PNG files.")
-
-    error_data = {
-        "heuristic": [],
-        "uncertainty": [],
-        "uniform": [],
-        "random": []
-    }
-
-    print("Colonie raccolte:", list(colony_results.keys()))
 
 
 if __name__ == "__main__":

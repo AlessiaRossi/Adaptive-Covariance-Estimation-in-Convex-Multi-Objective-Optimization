@@ -66,7 +66,8 @@ def main():
     # Show the plots
     plt.show()
 
-    """Main function to orchestrate the GP modeling and evaluation """
+
+
     # Load the data
     print("Loading lambda-covariance data ...")
     data = load_lambda_covariance_data()

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-# Parametri del problema
+# Problem definition
 a = 1.0
 b = -2.0
 
@@ -12,31 +12,27 @@ def f2(x):
     return 0.5 * (x - b) ** 2
 
 def scalarized_objective(x, lmbd):
-    """Funzione scalare per dato x e lambda."""
+    """ Scalar objective function for a given x and lambda. Combines f1 and f2 using the weight lambda."""
     return lmbd * f1(x) + (1 - lmbd) * f2(x)
 
 def optimize_for_lambda(lmbd):
-    """Restituisce x ottimo per dato lambda (soluzione analitica)."""
-    # Per il problema quadratico la soluzione ottima è:
+    """ Returns the optimal x for a given lambda (analytical solution).For the quadratic problem, the optimal solution is a weighted average of 'a' and 'b'."""
     x_opt = lmbd * a + (1 - lmbd) * b
     return x_opt
 
-def generate_lambda_samples(n_samples):
-    """Genera n_samples valori di lambda in [0,1]."""
+def generate_lambda_samples(n_samples, random_state=None):
+    """Generates 'n_samples' values of lambda in the range [0, 1]."""
+    if random_state is not None:
+        np.random.seed(random_state)
     return np.linspace(0, 1, n_samples)
 
-def compute_and_save_covariance(
-    N_ref=10000,
-    data_filename='results_data_toy.csv',
-    covariance_filename='results_covariance_toy.csv'
-):
-    """
-    Calcola le soluzioni ottime per molte combinazioni di lambda,
-    salva i risultati e la matrice di covarianza.
-    """
-    lambda_samples = generate_lambda_samples(N_ref)
+def compute_and_save_covariance(N_ref=10000, data_filename='results_data_toy.csv', covariance_filename='results_covariance_toy.csv'):
+    """ Computes the optimal solutions for many lambda values,saves the results and the covariance matrix to files."""
+    # Generate lambda samples
+    lambda_samples = generate_lambda_samples(N_ref, random_state=random_state)
     solutions = []
 
+    # Compute the optimal solution for each lambda
     for lmbd in lambda_samples:
         x_opt = optimize_for_lambda(lmbd)
         solutions.append({
@@ -44,31 +40,32 @@ def compute_and_save_covariance(
             'x_opt': x_opt
         })
 
+    # Create a DataFrame with the results
     df = pd.DataFrame(solutions)
     X = df[['x_opt']].values  # shape (N_ref, 1)
     x_mean = np.mean(X, axis=0)
     X_centered = X - x_mean
-    # Per una sola variabile, la "matrice" di covarianza è uno scalare (la varianza)
+    # Compute the covariance matrix (for a single variable, this is the variance)
     C_ref = (X_centered.T @ X_centered) / (N_ref - 1)
 
-    # Salva i dati principali nel file data_filename
+    # Save the main data to the file 'data_filename'
     df.to_csv(data_filename, index=False)
 
-    # Aggiungi la media al file data_filename
+    # Append the mean to the file 'data_filename'
     with open(data_filename, 'a') as f:
         f.write('\n# Media\n')
         f.write(','.join(map(str, x_mean)) + '\n')
 
-    # Salva la matrice di covarianza nel file covariance_filename
+    # Save the covariance matrix to the file 'covariance_filename'
     with open(covariance_filename, 'w') as f:
         for row in C_ref:
             f.write(','.join(map(str, row)) + '\n')
 
-    print(f"Dati salvati in '{data_filename}' e matrice di covarianza in '{covariance_filename}'")
+    print(f"Data saved to '{data_filename}' and covariance matrix to '{covariance_filename}'")
     return df, C_ref, x_mean
 
-# Esempio di esecuzione
+
 if __name__ == "__main__":
-    df_sol, cov_mat, media = compute_and_save_covariance(N_ref=10000)
-    print("Media x̄:", media)
-    print("Matrice di covarianza C_ref:\n", cov_mat)
+    df_sol, cov_mat, mean = compute_and_save_covariance(N_ref=10000,random_state=42)
+    print("Mean x̄:", mean)
+    print("Covariance matrix  C_ref:\n", cov_mat)

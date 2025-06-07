@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 
+# Problem definition
 def problem(x, lambdas):
     f1 = np.sum(x * np.cos(x) - x ** 3 + np.sin(x))
     f2 = np.sum(5 * np.sin(x) + 5 * x ** 3 - np.cos(x) * np.exp(x))
@@ -11,6 +12,7 @@ def problem(x, lambdas):
         raise ValueError("lambdas must be non-negative and sum to 1")
     return lambdas[0] * f1 + lambdas[1] * f2 + lambdas[2] * f3
 
+# Optimization function
 def optimize_for_lambda(lambdas, x_range=(-2, 2)):
     objective = lambda x: problem(x, lambdas)
 
@@ -25,13 +27,16 @@ def optimize_for_lambda(lambdas, x_range=(-2, 2)):
             best_result = result
 
     if best_result is None:
-        raise RuntimeError("Ottimizzazione fallita")
+        raise RuntimeError("Optimization failed for all attempts.")
 
     return best_result.x
 
+# Generate random lambda vectors
 def generate_lambdas(n_samples, n_objectives=3):
     return np.random.dirichlet(np.ones(n_objectives), size=n_samples)
 
+
+# Compute and save results in separate CSV files
 def compute_and_save_separate_csv(N_ref=10000,
                                   data_filename='C:\\Users\\aless\\Desktop\\Tesi\\Articolo\\Articolo\\results_data.csv',
                                   covariance_filename='C:\\Users\\aless\\Desktop\\Tesi\\Articolo\\Articolo\\results_covariance.csv'):
@@ -55,23 +60,22 @@ def compute_and_save_separate_csv(N_ref=10000,
     X_centered = X - x_mean
     C_ref = (X_centered.T @ X_centered) / (N_ref - 1)
 
-    # Salva i dati principali nel file data_filename
     df.to_csv(data_filename, index=False)
 
-    # Aggiungi la media al file data_filename
     with open(data_filename, 'a') as f:
         f.write('\n# Media\n')
         f.write(','.join(map(str, x_mean)) + '\n')
 
-    # Salva la matrice di covarianza nel file covariance_filename
     with open(covariance_filename, 'w') as f:
         for row in C_ref:
             f.write(','.join(map(str, row)) + '\n')
 
-    print(f"Dati salvati in '{data_filename}' e matrice di covarianza in '{covariance_filename}'")
+    print(f"Data saved in '{data_filename}' and covariance matrix in '{covariance_filename}'")
     return df, C_ref, x_mean
 
-# Esempio di esecuzione
+
+
+
 df_sol, cov_mat, media = compute_and_save_separate_csv(N_ref=10000)
-print("Media x̄:", media)
-print("Matrice di covarianza C_ref:\n", cov_mat)
+print("Mean vector:\n", media)
+print("Covariance matrix:\n", cov_mat)
