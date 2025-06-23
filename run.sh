@@ -15,10 +15,11 @@ source ~/venvs/alessia-ml-env/bin/activate
 
 # Esegui lo script Python desiderato
 #python C_r.py
-python alt3.py
+#python alt3.py
 #python toy.py
 #python main.py
 #python surr_model_toy.py
+python Crif_project.py 
 
 
 

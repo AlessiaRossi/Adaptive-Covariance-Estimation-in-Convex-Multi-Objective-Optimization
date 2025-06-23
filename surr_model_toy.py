@@ -41,7 +41,7 @@ def generate_lambda_samples(n_samples):
     return np.linspace(0, 1, n_samples)
 
 
-def generate_perturbed_lambdas(lmbd, n_perturb=10, delta=0.05):
+def generate_perturbed_lambdas(lmbd, n_perturb=100, delta=0.005):
     """Generates n_perturb perturbed lambda values around lambda."""
     np.random.seed(GLOBAL_SEED)
     perturbed = lmbd + np.random.uniform(-delta, delta, n_perturb)
@@ -78,7 +78,7 @@ def build_dataset(
         n_perturb=10,
         delta=0.05,
         lambda_list=None,
-        n_samples=5000,
+        n_samples=50000,
         previous_df=None
 ):
     """ Creates a dataset with lambda, x_opt, f_opt, Hessian, and local covariance.If previous_df is provided, only adds new lambda values not already present."""
@@ -111,8 +111,8 @@ def build_dataset(
     return pd.DataFrame(data)
 
 
-def fit_gp_model(data, n_training=100,random_state=GLOBAL_SEED):
-    ''' Train a Gaussian Process (GP) model on the dataset'''
+def fit_gp_model(data, train_size=0.8, random_state=GLOBAL_SEED):
+    ''' Train a Gaussian Process (GP) model on the dataset with train/test split '''
     X = data[['lambda']].values
     y = data["x_opt"].values
 
@@ -123,7 +123,9 @@ def fit_gp_model(data, n_training=100,random_state=GLOBAL_SEED):
     y_scaled = scaler_y.transform(y.reshape(-1, 1)).ravel()
 
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled,train_size=min(n_training, len(X_scaled) - 1),random_state=random_state)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_scaled, y_scaled, train_size=train_size, random_state=random_state
+    )
 
     # Define the GP kernel and train the model
     kernel = C(1.0, (1e-3, 1e3)) * RBF(0.5, (1e-2, 1e2))
@@ -132,16 +134,15 @@ def fit_gp_model(data, n_training=100,random_state=GLOBAL_SEED):
     return model, X_train, X_test, y_train, y_test, scaler_X, scaler_y
 
 
-def train_and_prepare_surrogate(data, n_training=100, random_state=42, model_path="surrogate_toy_gp.pkl"):
+def train_and_prepare_surrogate(data, train_size=0.8, random_state=42, model_path="surrogate_toy_gp.pkl"):
     """Trains a surrogate model and returns a dictionary compatible with ACOActiveLearner. Also saves the model."""
 
-    model, X_train, X_test, y_train, y_test, scaler_X, scaler_y = fit_gp_model(data, n_training, random_state)
+    model, X_train, X_test, y_train, y_test, scaler_X, scaler_y = fit_gp_model(data, train_size, random_state)
     surrogate_model = {
         'model': model,
         'scaler_X': scaler_X,
         'scaler_y': scaler_y
     }
-    # Save the surrogate model
     joblib.dump(surrogate_model, model_path)
     print(f"Surrogate model saved to {model_path}")
     return surrogate_model, model, X_train, X_test, y_train, y_test, scaler_X, scaler_y

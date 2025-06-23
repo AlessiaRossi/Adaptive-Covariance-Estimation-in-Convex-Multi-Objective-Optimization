@@ -355,13 +355,12 @@ def run_single_colony(colony_id, archive_data, gp_model, C_ref, params, already_
     # Compute heuristic values (eta) for the lambdas
     print(f"Colony {colony_id}: calculating heuristic eta")
     aco.compute_heuristic()
-    # Select initial diverse lambdas based on the selection criterion
+    
+    # Initial selection of lambdas based on the specified criterion
     print(f"Colony {colony_id}: selecting initial diverse lambdas with criterion: {selection_criterion}")
     if already_selected is None:
         already_selected = set()
     n_init = params['n_init_diverse']
-
-    # Initial selection of lambdas based on the specified criterion
     if selection_criterion == "heuristic":
         # Use heuristic values and enforce a minimum distance between lambdas
         min_dist = 0.053

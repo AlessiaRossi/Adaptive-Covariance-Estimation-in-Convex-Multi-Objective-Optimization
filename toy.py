@@ -84,7 +84,7 @@ class ACOActiveLearner:
             diversity_penalty = 1 / (1 + min([np.linalg.norm(lam - np.array(sel)) for sel in self.Selected] + [1.0]))
             self.eta[lam_tuple] = ((y_pred[i] - y_pred_mean) / y_pred_std) * diversity_penalty
 
-    def select_diverse_lambdas(self, n_select=20, min_dist=0.08, score_dict=None, exclude_lambdas=None,
+    def select_diverse_lambdas(self, n_select=20, min_dist=0.085, score_dict=None, exclude_lambdas=None,
                                random_state=None):
         ''' Select diverse lambdas based on the heuristic eta '''
         print(f"Selecting diverse lambdas with min_dist={min_dist}...")
@@ -152,14 +152,14 @@ class ACOActiveLearner:
         print(f"Total candidates sampled: {len(sampled)}")
         return sampled
 
-    def run_aco_active_learning(self, C_ref,alpha=1.0, beta=1.0,epsilon=None, budget=10,n_init_diverse=5, min_lambda=10, top_k=20,model_path="surrogate_modelDTLZ2.pkl", reload_surrogate=True,colony_id=None, selection_criterion=None):
+    def run_aco_active_learning(self, C_ref,alpha=1.0, beta=1.0,epsilon=None, budget=10,n_init_diverse=5,min_lambda=10, top_k=20,model_path="surrogate_toy_gp1.pkl", reload_surrogate=True,colony_id=None, selection_criterion=None):
         ''' Run the Ant Colony Optimization (ACO) active learning algorithm to iteratively select a diverse and informative set of lambdas that minimize the error between the empirical covariance matrix and the reference matrix C_ref.'''
         if epsilon is None:
             epsilon = 1e-6
 
         # Initialize the selected lambdas and compute the initial empirical covariance matrix.
         if len(self.Selected) == 0:
-            self.Selected = set(self.select_diverse_lambdas(n_select=n_init_diverse, min_dist=0.08))
+            self.Selected = set(self.select_diverse_lambdas(n_select=n_init_diverse, min_dist=0.085))
             self.C_e = self.compute_Ce_from_lambdas(self.Selected)
 
         val_count = len(self.Selected)
@@ -228,7 +228,7 @@ class ACOActiveLearner:
             if len(self.Selected) > max_lambdas:
                 before_pruning = set(self.Selected)
                 self.Selected = set(
-                    self.select_diverse_lambdas(n_select=max_lambdas, min_dist=0.08, score_dict=self.tau))
+                    self.select_diverse_lambdas(n_select=max_lambdas, min_dist=0.085, score_dict=self.tau))
                 n_removed = len(before_pruning) - len(self.Selected)
                 print(f"Lambda removed during pruning: {n_removed}")
                 print(f"Lambda selected after pruning: {len(self.Selected)}")
@@ -275,7 +275,10 @@ class ACOActiveLearner:
                 )
         else:
             print(f"STOP:maximum number of iterations reached ({max_iter})")
+        return self.Selected, self.C_e, error_list, selected_count_list, best_config, best_error
 
+        
+    
     def compute_Ce_from_lambdas(self, lambdas_list):
         ''' Compute the empirical covariance matrix from selected lambdas '''
         if len(lambdas_list) <= 1:
@@ -354,8 +357,6 @@ def get_or_train_model(archive_file, model_path, n_training=100, random_state=42
         surrogate_model, *_ = train_and_prepare_surrogate(data, n_training, random_state)
         joblib.dump(surrogate_model, model_path)
     return surrogate_model
-
-
 def sample_uniform_simplex(n, d=3, random_state=GLOBAL_SEED):
     """
     Sample n points (or as close as possible) uniformly from the (d-1)-simplex (sum=1, all >=0)
@@ -419,7 +420,7 @@ def run_single_colony(colony_id, archive_data, gp_model, C_ref, params, already_
     # Initial selection of lambdas based on the specified criterion
     if selection_criterion == "heuristic":
         # Use heuristic values and enforce a minimum distance between lambdas
-        min_dist = 0.08
+        min_dist = 0.085
         initial = aco.select_diverse_lambdas(
             n_select=n_init,
             min_dist=min_dist,
@@ -428,7 +429,7 @@ def run_single_colony(colony_id, archive_data, gp_model, C_ref, params, already_
         )
     elif selection_criterion == "uncertainty":
         # Use uncertainty (standard deviation) from the surrogate model and enforce a minimum distance
-        min_dist = 0.08
+        min_dist = 0.085
         X = archive_data[['lambda']].values
         X_scaled = gp_model['scaler_X'].transform(X)
         _, std_pred = gp_model['model'].predict(X_scaled, return_std=True)
@@ -460,19 +461,14 @@ def run_single_colony(colony_id, archive_data, gp_model, C_ref, params, already_
     # Run the ACO active learning process
     Selected, C_e, error_list, selected_count_list, best_config, best_error = aco.run_aco_active_learning(
         C_ref=C_ref,
-        archive_data=archive_data,
-        n_ants=params['n_ants'],
         alpha=params['alpha'],
         beta=params['beta'],
         epsilon=params['epsilon'],
         budget=params['budget'],
-        retrain_every=params['retrain_every'],
         n_init_diverse=params['n_init_diverse'],
-        exclude_lambdas=already_selected,
-        random_state=GLOBAL_SEED,
         min_lambda=params['n_init_diverse'] // 2,
         top_k=params['top_k'],
-        model_path=params.get('model_path', 'surrogate_model.pkl'),
+        model_path=params.get('model_path', 'surrogate_toy_gp1.pkl'),
         reload_surrogate=True,
         colony_id=colony_id,
         selection_criterion=selection_criterion  # <--- Passa il criterio
@@ -504,6 +500,7 @@ def retrain_surrogate(self, random_state=None):
     retrain_df = pd.DataFrame({
         'lambda': retrain_lambdas.flatten(),
         'x_opt': retrain_xopt.flatten(),
+        
     })
     surrogate_model, model, X_train, X_test, y_train, y_test, scaler_X, scaler_y = train_and_prepare_surrogate(
         retrain_df, n_training=len(retrain_df), random_state=random_state
@@ -516,19 +513,25 @@ def retrain_surrogate(self, random_state=None):
 
 
 def retrain_surrogate_with_selected(self, random_state=None):
-
+    # 1. Prepara i lambda selezionati come lista di tuple
     selected_lambdas = [tuple(lam) for lam in self.Selected]
     n_samples = len(selected_lambdas)
+    # 2. Salva i lambda selezionati in un file temporaneo (o passa direttamente la lista)
     with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as tmpfile:
         output_file = tmpfile.name
-   df = build_dataset(n_samples, output_file, lambda_list=selected_lambdas)
+    # 3. Usa compute_and_save_covariance_samples per calcolare tutte le feature derivate
+    # Modifica compute_and_save_covariance_samples per accettare una lista di lambda opzionale:
+    # compute_and_save_covariance_samples(n_samples, output_file, lambda_list=None)
+    df = build_dataset(n_samples, output_file, lambda_list=selected_lambdas)
+    # 4. Riallena il modello surrogato con il nuovo dataset
     surrogate_model, model, X_train, X_test, y_train, y_test, scaler_X, scaler_y = train_and_prepare_surrogate(
-        df, n_training=len(df), random_state=random_state )
+        df, n_training=len(df), random_state=random_state
+    )
     self.surrogate = surrogate_model
     print(f"Surrogate model retrained with {n_samples} selected lambdas.")
 
 
-def maybe_reload_surrogate(local_model, model_path="surrogate_globalDTLZ2.pkl", last_mtime=None):
+def maybe_reload_surrogate(local_model, model_path="surrogate_toy_gp1.pkl", last_mtime=None):
     if os.path.exists(model_path):
         mtime = os.path.getmtime(model_path)
         if last_mtime is None or mtime > last_mtime:
@@ -537,11 +540,10 @@ def maybe_reload_surrogate(local_model, model_path="surrogate_globalDTLZ2.pkl", 
             return surrogate, mtime
     return local_model, last_mtime
 
-
 def plot_results(colony_results, criteri_colonie):
     colors = ['blue', 'green', 'orange', 'red', 'purple', 'cyan']
 
-    # 1. Graph of error per iteration for each criterion
+    # 1. Grafico dell'errore per iterazione
     plt.figure(figsize=(10, 6))
     for idx, criterion in enumerate(criteri_colonie):
         res = colony_results[criterion]
@@ -556,7 +558,7 @@ def plot_results(colony_results, criteri_colonie):
     plt.savefig("error_per_iteration.png", dpi=300)
     plt.show()
 
-    # 2. Graph of the number of selected samples per iteration for each criterion
+    # 2. Grafico del numero di campioni selezionati per iterazione
     plt.figure(figsize=(10, 6))
     for idx, criterion in enumerate(criteri_colonie):
         res = colony_results[criterion]
@@ -572,7 +574,7 @@ def plot_results(colony_results, criteri_colonie):
     plt.savefig("selected_samples_per_iteration.png", dpi=300)
     plt.show()
 
-    # 3. Graph of the lowest error achieved for each criterion
+    # 3. Grafico a barre del valore di errore più basso raggiunto
     plt.figure(figsize=(8, 6))
     lowest_errors = [min(colony_results[criterion].get("error_list", [float('inf')])) for criterion in criteri_colonie]
     plt.bar(criteri_colonie, lowest_errors, color=colors[:len(criteri_colonie)])
@@ -592,7 +594,7 @@ def main():
     # Define file paths for input data and model
     archive_file = 'toy_quadratic_dataset.csv'
     ground_truth_file = 'results_covariance_toy.csv'
-    model_path = 'surrogate_toy_gp.pkl'
+    model_path = 'surrogate_toy_gp1.pkl'
 
     archive_data = pd.read_csv(archive_file)
     print(f"Loaded archive data with shape: {archive_data.shape}", flush=True)
@@ -606,16 +608,18 @@ def main():
     # Define parameters for the ACO process
     params = dict(
         n_ants=550,
-        top_k=50,
+        top_k=60,
         alpha=1.0,
         beta=1.0,
         omega=1.0,
         epsilon=0.001,
         budget=15,
         retrain_every=5,
-        n_init_diverse=100
+        n_init_diverse=110
     )
-
+    print("\n--- Parameters used for ACO and Active Learning ---")
+    for k, v in params.items():
+        print(f"  {k}: {v}")
     # Define the number of colonies and selection criteria
     n_colonies = 4
     criteri_colonie = ["heuristic", "uncertainty", "uniform", "random"]  # scegli quelli che vuoi
@@ -649,43 +653,20 @@ def main():
                                }.values())
     print(f"Total unique lambdas selected: {len(all_selected_unique)}")
 
-    '''  Retraining surrogate model with all selected lambdas from all colonies 
-    print("\nRetraining surrogate model with all selected lambdas from all colonies...")
-    # Carica il dataset precedente
-    previous_df = pd.read_csv("toy_quadratic_dataset.csv")
 
-    # Prepara la lista dei nuovi lambda (ad esempio, da tutte le colonie)
-    new_lambdas = [lam[0] for lam in all_selected_unique]
-
-    # Crea il nuovo dataset aggiornato
-    updated_df = build_dataset(
-        lambda_list=new_lambdas,
-        previous_df=previous_df
-    )
-    surrogate_model, model, X_train, X_test, y_train, y_test, scaler_X, scaler_y = train_and_prepare_surrogate(
-        updated_df, n_training=len(updated_df), random_state=GLOBAL_SEED)
-    joblib.dump(surrogate_model, model_path)
-    print(f"Surrogate model retrained and saved to {model_path} with {len(updated_df)} samples.")
-
-    # Valutazione finale
-    y_pred, y_std, metrics = evaluate_model(model, X_test, y_test)
-    print("Surrogate model evaluation metrics after final retrain:")
-    for k, v in metrics.items():
-        print(f"  {k}: {v:.4f}")'''
 
     # Compute the final empirical covariance matrix
     C_e_final = ACOActiveLearner(archive_data, gp_model).compute_Ce_from_lambdas(all_selected_unique)
     final_error = np.linalg.norm(C_ref - C_e_final, ord='fro') if C_e_final is not None else None
-    print(f"Final error (union): {final_error:.4f}")
+    
+    #print("\n C_ref matrix (Ground Truth):")
+    #print(np.array2string(C_ref, precision=4, suppress_small=True))
 
-    print("\n C_ref matrix (Ground Truth):")
-    print(np.array2string(C_ref, precision=4, suppress_small=True))
-
-    print("\nC_e_final matrix (Empirical):")
-    if C_e_final is not None:
-        print(np.array2string(C_e_final, precision=4, suppress_small=True))
-    else:
-        print("C_e_final not available")
+    #print("\nC_e_final matrix (Empirical):")
+    #if C_e_final is not None:
+    #    print(np.array2string(C_e_final, precision=4, suppress_small=True))
+    #else:
+    #    print("C_e_final not available")
 
     print("\n--- Final Results ---")
     print(f"Lambdas selected from all colonies: {len(all_selected_unique)}")
@@ -707,7 +688,18 @@ def main():
         print(f"  Best configuration: {res['best_config']}")
         print(f"  Best error: {res['best_error']:.4f}")
         print(f"  Selection criterion: {res['criterion']}")
-
+            # Calcolo e stampa della matrice di covarianza, media e varianza per la best configuration della colonia
+        best_lambdas = res['best_config']
+        if best_lambdas is not None and len(best_lambdas) > 1:
+            C_e_colony = ACOActiveLearner(archive_data, gp_model).compute_Ce_from_lambdas(best_lambdas)
+            print(f"  [Colony {i}] Covariance matrix (C_e_colony):\n{np.array2string(C_e_colony, precision=4, suppress_small=True)}")
+            print(f"  [Colony {i}] Mean of C_e_colony elements: {np.mean(C_e_colony):.6f}")
+            print(f"  [Colony {i}] Variance of C_e_colony elements: {np.var(C_e_colony):.6f}")
+        else:
+            print(f"  [Colony {i}] Not enough lambdas to compute covariance matrix.")
+            
+      
+        
     plot_results(colony_results, criteri_colonie)
     print("Plots saved as PNG files.")
 
